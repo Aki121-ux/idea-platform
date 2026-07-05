@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Idea Platform</title>
+<title>Idea Platform · Screener</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
@@ -28,7 +28,7 @@ a{color:var(--accent);text-decoration:none}
 
 /* layout */
 .shell{display:flex;min-height:100vh}
-.sidebar{position:fixed;inset:0 auto 0 0;width:240px;background:var(--card);border-right:1px solid var(--border);padding:20px 12px;display:flex;flex-direction:column;gap:4px;z-index:20}
+.sidebar{position:fixed;inset:0 auto 0 0;width:220px;background:var(--card);border-right:1px solid var(--border);padding:20px 12px;display:flex;flex-direction:column;gap:4px;z-index:20}
 .brand{font-size:19px;font-weight:800;letter-spacing:-.02em;padding:4px 12px 18px}
 .brand span{color:var(--accent)}
 .nav-item{display:flex;align-items:center;gap:12px;border-radius:var(--radius);padding:10px 12px;font-size:14px;font-weight:500;color:var(--text-muted);cursor:pointer;transition:all .15s ease;border:none;background:none;font-family:inherit;text-align:left;width:100%}
@@ -39,57 +39,88 @@ a{color:var(--accent);text-decoration:none}
 .theme-btn{display:flex;align-items:center;gap:12px;border-radius:var(--radius);padding:10px 12px;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:1px solid var(--border);background:none;font-family:inherit;transition:all .15s ease}
 .theme-btn:hover{background:var(--surface);color:var(--text)}
 .theme-btn svg{width:16px;height:16px;flex:none}
-.content{flex:1;margin-left:240px;padding:28px 20px 90px}
-.wrap{max-width:768px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.content{flex:1;margin-left:220px;padding:24px 24px 90px;max-width:1400px}
+.page-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px}
 .page-title{font-size:24px;font-weight:800;letter-spacing:-.02em;margin:0}
-.page-sub{font-size:12px;color:var(--text-muted);margin-top:4px}
+.page-sub{font-size:12px;color:var(--text-muted);margin-top:4px;max-width:640px}
 
 /* mobile */
 .bottombar{display:none}
-@media (max-width:800px){
+@media (max-width:860px){
   .sidebar{display:none}
-  .content{margin-left:0;padding:20px 14px 90px}
+  .content{margin-left:0;padding:18px 12px 90px}
   .bottombar{display:flex;position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb, var(--card) 95%, transparent);backdrop-filter:blur(10px);border-top:1px solid var(--border);z-index:20}
   .bottombar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0 12px;font-size:10px;font-weight:600;color:var(--text-muted);background:none;border:none;font-family:inherit;cursor:pointer}
   .bottombar button.on{color:var(--accent)}
   .bottombar svg{width:20px;height:20px}
 }
 
-/* card */
-.card{border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);border:1px solid var(--border);padding:16px}
-@media(min-width:640px){.card{padding:20px}}
-
-/* hero */
-.hero{position:relative;overflow:hidden;border-radius:var(--radius-lg);padding:24px;color:#fff;box-shadow:var(--shadow);background:linear-gradient(135deg,var(--accent) 0%,#6d28d9 55%,#9333ea 100%)}
-@media(min-width:640px){.hero{padding:32px}}
-.hero .blob{position:absolute;border-radius:50%;background:rgba(255,255,255,.1);filter:blur(32px)}
-.hero .label{font-size:12px;font-weight:500;color:rgba(255,255,255,.8)}
-.hero .big{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:4px 0}
-.hero .sub{font-size:12px;color:rgba(255,255,255,.7)}
-
 /* controls */
-.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
 .seg{display:flex;gap:4px;border-radius:12px;background:var(--surface);padding:3px}
-.seg button{border-radius:9px;padding:5px 11px;font-size:12px;font-weight:500;color:var(--text-muted);background:none;border:none;font-family:inherit;cursor:pointer;white-space:nowrap;transition:all .15s ease}
+.seg button{border-radius:9px;padding:6px 12px;font-size:12px;font-weight:500;color:var(--text-muted);background:none;border:none;font-family:inherit;cursor:pointer;white-space:nowrap;transition:all .15s ease}
 .seg button.on{background:var(--card);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.08);font-weight:600}
-.search{flex:1;min-width:150px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);padding:9px 14px;font-size:14px;color:var(--text);outline:none;font-family:inherit}
+.search{flex:1;min-width:160px;max-width:340px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);padding:9px 14px;font-size:14px;color:var(--text);outline:none;font-family:inherit}
 .search::placeholder{color:var(--text-muted)}
 .search:focus{border-color:var(--accent)}
+.count-chip{font-size:12px;font-weight:600;color:var(--text-muted);white-space:nowrap}
 
-/* list rows */
-.rows{display:flex;flex-direction:column}
-.rows .row + .row{border-top:1px solid var(--border)}
-.row{display:flex;align-items:center;gap:12px;padding:12px 8px;border-radius:var(--radius);cursor:pointer;transition:background .15s ease}
-.row:hover{background:var(--surface)}
-.avatar{height:40px;width:40px;border-radius:var(--radius-pill);display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
-.row-main{flex:1;min-width:0}
-.row-title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.row-sub{font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
-.row-right{text-align:right;flex:none}
-.row-amt{font-size:14px;font-weight:600}
-.row-when{font-size:11px;color:var(--text-muted);margin-top:1px}
+/* table */
+.tbl{border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);border:1px solid var(--border);overflow:hidden}
+.trow{display:grid;grid-template-columns:var(--cols);gap:10px;align-items:center;padding:11px 16px}
+.thead{position:sticky;top:0;background:var(--card);border-bottom:1px solid var(--border);z-index:5}
+.th{font-size:10px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-muted);cursor:pointer;user-select:none;display:flex;align-items:center;gap:4px;white-space:nowrap}
+.th:hover{color:var(--text)}
+.th.num{justify-content:flex-end}
+.th .arr{opacity:0;font-size:9px}
+.th.act .arr{opacity:1}
+.th.act{color:var(--text)}
+.tbody .trow{border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s ease}
+.tbody .trow:last-child{border-bottom:none}
+.tbody .trow:hover{background:var(--surface)}
+.tbody .trow.sel{background:color-mix(in srgb, var(--accent) 8%, transparent)}
+.cell-idea{min-width:0;display:flex;align-items:center;gap:11px}
+.avatar{height:34px;width:34px;border-radius:10px;display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+.idea-main{min-width:0}
+.idea-title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.idea-sub{font-size:11px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.cell-num{text-align:right;font-size:13px;font-weight:600}
+.cell-num.mut{color:var(--text-muted);font-weight:500}
+.st{display:inline-flex;align-items:center;gap:5px;border-radius:var(--radius-pill);padding:3px 9px;font-size:11px;font-weight:600;white-space:nowrap}
+.st .dt{width:6px;height:6px;border-radius:50%;flex:none}
+.st.exists{background:#ef444418;color:var(--negative)}
+.st.gap{background:#16a34a18;color:var(--positive)}
+.st.unknown{background:var(--surface);color:var(--text-muted)}
+.st.build{background:#16a34a18;color:var(--positive)}
+.st.watch{background:#eab30822;color:var(--amber)}
+.st.skip{background:#ef444418;color:var(--negative)}
+.st.none{background:transparent;color:var(--text-muted);padding-left:0}
 .pill{display:inline-flex;align-items:center;border-radius:var(--radius-pill);padding:2px 8px;font-size:11px;font-weight:600}
 .pill.neutral{background:var(--surface);color:var(--text-muted)}
+
+/* drawer */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.32);opacity:0;pointer-events:none;transition:opacity .2s ease;z-index:30}
+.overlay.show{opacity:1;pointer-events:auto}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:460px;max-width:92vw;background:var(--bg);border-left:1px solid var(--border);box-shadow:-8px 0 40px rgba(0,0,0,.16);transform:translateX(100%);transition:transform .22s cubic-bezier(.4,0,.2,1);z-index:31;display:flex;flex-direction:column}
+.drawer.show{transform:translateX(0)}
+.drawer-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);flex:none}
+.drawer-head .dtag{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--text-muted)}
+.iconbtn{width:32px;height:32px;border-radius:10px;border:1px solid var(--border);background:var(--surface);color:var(--text-muted);cursor:pointer;display:grid;place-items:center;font-size:15px;font-family:inherit}
+.iconbtn:hover{color:var(--text)}
+.drawer-body{padding:20px;overflow-y:auto;flex:1}
+.detail-title{font-size:20px;font-weight:800;letter-spacing:-.02em;margin:0 0 10px;line-height:1.25}
+.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--text-muted)}
+.desc{font-size:14px;color:var(--text-muted);line-height:1.6;white-space:pre-wrap;margin:14px 0 0}
+.section-label{font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--text-muted);margin:22px 0 10px}
+.setter{display:flex;gap:8px;flex-wrap:wrap}
+.setter button{border-radius:var(--radius-pill);border:1px solid var(--border);background:var(--surface);color:var(--text-muted);padding:7px 14px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .12s ease;display:inline-flex;align-items:center;gap:6px}
+.setter button:hover{color:var(--text)}
+.setter button.sel.exists{background:#ef444418;color:var(--negative);border-color:transparent}
+.setter button.sel.gap{background:#16a34a18;color:var(--positive);border-color:transparent}
+.setter button.sel.unknown{background:var(--card);color:var(--text);border-color:var(--border)}
+.de-links{display:flex;gap:8px;flex-wrap:wrap}
+.de-links a{display:inline-flex;align-items:center;gap:6px;border-radius:var(--radius-pill);border:1px solid var(--border);background:var(--surface);padding:7px 13px;font-size:12px;font-weight:600;color:var(--text)}
+.de-links a:hover{border-color:var(--accent);color:var(--accent)}
 
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius);padding:10px 16px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s ease;border:none;text-decoration:none}
@@ -100,40 +131,30 @@ a{color:var(--accent);text-decoration:none}
 .btn.good{background:var(--positive);color:#fff}
 .btn.warn{background:var(--amber);color:#221a00}
 .btn.bad{background:var(--negative);color:#fff}
-.btnrow{display:flex;gap:10px;flex-wrap:wrap}
-
-/* detail */
-.detail-title{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:0 0 8px}
-.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--text-muted)}
-.desc{font-size:14px;color:var(--text-muted);line-height:1.6;white-space:pre-wrap;margin:14px 0 0}
-.back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);cursor:pointer;background:none;border:none;font-family:inherit;padding:0}
-.back:hover{color:var(--text)}
-.section-label{font-size:13px;font-weight:600;margin:0 0 10px}
-.de-links{display:flex;gap:8px;flex-wrap:wrap}
-.de-links a{display:inline-flex;align-items:center;gap:6px;border-radius:var(--radius-pill);border:1px solid var(--border);background:var(--surface);padding:7px 13px;font-size:12px;font-weight:600;color:var(--text)}
-.de-links a:hover{border-color:var(--accent);color:var(--accent)}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
 
 /* analyze */
-.progress{height:4px;border-radius:2px;background:var(--surface);overflow:hidden}
+.progress{height:4px;border-radius:2px;background:var(--surface);overflow:hidden;margin-bottom:6px}
 .progress div{height:100%;background:var(--accent);transition:width .3s ease}
-.timer{font-variant-numeric:tabular-nums;font-size:32px;font-weight:800;letter-spacing:-.02em;float:right;color:var(--accent)}
+.timer{font-variant-numeric:tabular-nums;font-size:30px;font-weight:800;letter-spacing:-.02em;float:right;color:var(--accent)}
 .timer.over{color:var(--negative)}
 .qnum{font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:.6px;text-transform:uppercase}
 .q-title{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:6px 0 2px}
 .q-hint{font-size:13px;color:var(--text-muted);margin-bottom:14px}
-textarea{width:100%;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--text);padding:12px 14px;font-size:14px;font-family:inherit;min-height:96px;resize:vertical;outline:none}
+textarea{width:100%;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--text);padding:12px 14px;font-size:14px;font-family:inherit;min-height:92px;resize:vertical;outline:none}
 textarea:focus{border-color:var(--accent)}
 .vrow{display:flex;gap:10px;margin:12px 0}
 .vrow .btn{flex:1;opacity:.4}
 .vrow .btn.sel{opacity:1;outline:2px solid color-mix(in srgb, var(--text) 25%, transparent)}
 
 /* stats */
-.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
 .kpi{border-radius:var(--radius);border:1px solid var(--border);background:var(--card);padding:16px;box-shadow:var(--shadow)}
 .kpi .l{font-size:12px;font-weight:500;color:var(--text-muted)}
 .kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+.card{border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);border:1px solid var(--border);padding:20px}
 .vbar{display:flex;height:10px;border-radius:var(--radius-pill);overflow:hidden;background:var(--surface)}
-.legend{display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--text-muted)}
+.legend{display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--text-muted);flex-wrap:wrap}
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
 
 /* states */
@@ -142,20 +163,22 @@ textarea:focus{border-color:var(--accent)}
 .empty .h{font-size:12px;color:var(--text-muted);margin-top:4px}
 .spinner{height:24px;width:24px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--accent);animation:spin .8s linear infinite;margin:64px auto}
 @keyframes spin{to{transform:rotate(360deg)}}
-.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--positive);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:50;box-shadow:var(--shadow)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--positive);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:60;box-shadow:var(--shadow)}
 .toast.show{opacity:1}
+
+/* hide columns on narrow */
+@media (max-width:640px){
+  .col-age{display:none}
+}
 </style>
 </head>
 <body>
 <div class="shell">
   <aside class="sidebar">
     <div class="brand">idea<span>·</span>platform</div>
-    <button class="nav-item" id="nav-feed" onclick="go('feed')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-      US Feed</button>
-    <button class="nav-item" id="nav-landscape" onclick="go('landscape')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-      DE · EU Landscape</button>
+    <button class="nav-item" id="nav-screener" onclick="go('screener')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+      Screener</button>
     <button class="nav-item" id="nav-stats" onclick="go('stats')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
       Training Stats</button>
@@ -165,20 +188,20 @@ textarea:focus{border-color:var(--accent)}
       <span id="theme-label">Dark mode</span></button>
   </aside>
 
-  <main class="content"><div class="wrap" id="main"><div class="spinner"></div></div></main>
+  <main class="content"><div id="main"><div class="spinner"></div></div></main>
 </div>
 
 <nav class="bottombar">
-  <button id="bnav-feed" onclick="go('feed')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-    US Feed</button>
-  <button id="bnav-landscape" onclick="go('landscape')">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-    DE · EU</button>
+  <button id="bnav-screener" onclick="go('screener')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
+    Screener</button>
   <button id="bnav-stats" onclick="go('stats')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
     Stats</button>
 </nav>
+
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer"><div id="drawer-inner"></div></aside>
 
 <div class="toast" id="toast"></div>
 
@@ -191,8 +214,11 @@ var DE_LANE = ['deutsche-startups','eu-startups'];
 var SRC_COLOR = {'hn-show':'#f97316','producthunt':'#ec4899','techcrunch':'#16a34a','deutsche-startups':'#a855f7','eu-startups':'#06b6d4'};
 var SRC_SHORT = {'hn-show':'HN','producthunt':'PH','techcrunch':'TC','deutsche-startups':'DS','eu-startups':'EU'};
 
-var state = {view:'feed', ideas:[], sources:[], analyses:[], loaded:false,
-  usSrc:'all', deSrc:'all', sort:'new', q:'', qDe:'', current:null, backTo:'feed', run:null};
+var COLS = '2.4fr .8fr .55fr 1fr .9fr';
+
+var state = {view:'screener', ideas:[], sources:[], analyses:[], loaded:false,
+  lane:'us', src:'all', unanalyzed:false, q:'',
+  sortKey:'age', sortDir:'desc', current:null, run:null, deColSupported:true};
 
 var STEPS = [
   {key:'problem', title:'Problem', hint:'Who hurts, and how badly?', sec:30},
@@ -200,7 +226,7 @@ var STEPS = [
   {key:'why_now', title:'Why now', hint:'What changed? Tech, regulation, or behavior.', sec:30},
   {key:'market_size', title:'Market size', hint:'Order-of-magnitude estimate. Niche, mid, or huge?', sec:30},
   {key:'moat', title:'Moat', hint:'What stops copycats in 6 months?', sec:30},
-  {key:'dach_fit', title:'Germany fit', hint:'Does it exist in DE already? Check the links you just saw. Language barrier as YOUR edge? Localization cost?', sec:60},
+  {key:'dach_fit', title:'Germany fit', hint:'Does it exist in DE already? Check the links below. Language barrier as YOUR edge? Localization cost?', sec:60},
   {key:'verdict', title:'Verdict', hint:'Build, watch, or skip - plus a one-line reason.', sec:15}
 ];
 
@@ -209,7 +235,7 @@ function api(path, opts){
   opts = opts || {};
   opts.headers = Object.assign({apikey:SB_KEY, Authorization:'Bearer '+SB_KEY, 'Content-Type':'application/json'}, opts.headers||{});
   return fetch(SB_URL+path, opts).then(function(r){
-    if(!r.ok) throw new Error('API '+r.status);
+    if(!r.ok) return r.text().then(function(t){ throw new Error('API '+r.status+' '+t.slice(0,120)); });
     return r.status===204?null:r.json();
   });
 }
@@ -223,10 +249,11 @@ function timeAgo(iso){
 }
 function tScore(i){ var t=i.traction||{}; return (t.upvotes||0)+(t.comments||0); }
 function slug(i){ return i.sources?i.sources.slug:''; }
+function laneOf(i){ return US_LANE.indexOf(slug(i))>=0?'us':(DE_LANE.indexOf(slug(i))>=0?'de':''); }
 function toast(msg,bad){
   var t=document.getElementById('toast'); t.textContent=msg;
   t.style.background=bad?'var(--negative)':'var(--positive)';
-  t.className='toast show'; setTimeout(function(){t.className='toast';},2400);
+  t.className='toast show'; setTimeout(function(){t.className='toast';},2600);
 }
 function toggleTheme(){
   var h=document.documentElement;
@@ -243,22 +270,9 @@ function toggleTheme(){
     if(l) l.textContent = document.documentElement.getAttribute('data-theme')==='dark'?'Light mode':'Dark mode';
   });
 })();
-function countUp(el, target){
-  var start=performance.now(), dur=900;
-  function tick(now){
-    var p=Math.min(1,(now-start)/dur); p=1-Math.pow(1-p,3);
-    el.textContent=Math.round(target*p);
-    if(p<1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
 function go(v){
-  state.view=v;
-  if(v!=='detail'&&v!=='analyze'){ state.current=null; }
-  if(v==='feed'||v==='landscape'){ state.backTo=v; }
-  render(); window.scrollTo(0,0);
+  state.view=v; closeDrawer(); render(); window.scrollTo(0,0);
 }
-function openIdea(id){ state.current=state.ideas.find(function(i){return i.id===id;}); go('detail'); }
 function analysisFor(id){ return state.analyses.find(function(a){return a.idea_id===id;}); }
 
 /* ---------- data ---------- */
@@ -268,158 +282,253 @@ function load(){
     api('/rest/v1/ideas?select=*,sources(slug,name)&order=published_at.desc.nullslast&limit=500'),
     api('/rest/v1/idea_analyses?select=idea_id,verdict,duration_seconds,created_at&order=created_at.desc&limit=1000')
   ]).then(function(res){
-    state.sources=res[0]; state.ideas=res[1]; state.analyses=res[2]; state.loaded=true; render();
+    state.sources=res[0]; state.ideas=res[1]; state.analyses=res[2];
+    state.deColSupported = res[1].length ? ('de_status' in res[1][0]) : true;
+    state.loaded=true; render();
   }).catch(function(e){
     document.getElementById('main').innerHTML='<div class="empty"><div class="t">Failed to load</div><div class="h">'+esc(e.message)+' - try reloading</div></div>';
   });
 }
 
-/* ---------- views ---------- */
-function render(){
-  ['feed','landscape','stats'].forEach(function(v){
-    var active = state.view===v || (v===state.backTo && (state.view==='detail'||state.view==='analyze'));
-    var n=document.getElementById('nav-'+v); if(n) n.className='nav-item'+(active?' on':'');
-    var b=document.getElementById('bnav-'+v); if(b) b.className=(active?'on':'');
-  });
-  var m=document.getElementById('main');
-  if(!state.loaded){ m.innerHTML='<div class="spinner"></div>'; return; }
-  if(state.view==='feed') m.innerHTML=laneHtml('us');
-  else if(state.view==='landscape') m.innerHTML=laneHtml('de');
-  else if(state.view==='detail') m.innerHTML=detailHtml();
-  else if(state.view==='analyze') m.innerHTML=analyzeHtml();
-  else if(state.view==='stats') m.innerHTML=statsHtml();
-  if(state.view==='analyze') bindStep();
-}
-
-function laneIdeas(lane){
-  var slugs = lane==='us'?US_LANE:DE_LANE;
-  var srcFilter = lane==='us'?state.usSrc:state.deSrc;
-  var q = (lane==='us'?state.q:state.qDe).toLowerCase();
-  var list = state.ideas.filter(function(i){
-    if(slugs.indexOf(slug(i))<0) return false;
-    if(srcFilter!=='all' && slug(i)!==srcFilter) return false;
+/* ---------- filtering / sorting ---------- */
+var DE_ORD={gap:2,exists:1,unknown:0}, V_ORD={build:3,watch:2,skip:1};
+function deStatus(i){ return i.de_status||'unknown'; }
+function verdictOf(i){ var a=analysisFor(i.id); return a?a.verdict:null; }
+function screenIdeas(){
+  var q=state.q.toLowerCase();
+  var list=state.ideas.filter(function(i){
+    var ln=laneOf(i);
+    if(state.lane==='us'&&ln!=='us') return false;
+    if(state.lane==='de'&&ln!=='de') return false;
+    if(state.src!=='all'&&slug(i)!==state.src) return false;
+    if(state.unanalyzed&&analysisFor(i.id)) return false;
     if(q && !((i.title||'')+' '+(i.description||'')).toLowerCase().includes(q)) return false;
     return true;
   });
-  if(state.sort==='traction') list=list.slice().sort(function(a,b){return tScore(b)-tScore(a);});
+  var k=state.sortKey, dir=state.sortDir==='asc'?1:-1;
+  list.sort(function(a,b){
+    var av,bv;
+    if(k==='age'){ av=a.published_at?new Date(a.published_at).getTime():0; bv=b.published_at?new Date(b.published_at).getTime():0; }
+    else if(k==='traction'){ av=tScore(a); bv=tScore(b); }
+    else if(k==='de'){ av=DE_ORD[deStatus(a)]||0; bv=DE_ORD[deStatus(b)]||0; }
+    else if(k==='verdict'){ av=V_ORD[verdictOf(a)]||0; bv=V_ORD[verdictOf(b)]||0; }
+    else if(k==='idea'){ av=(a.title||'').toLowerCase(); bv=(b.title||'').toLowerCase(); return av<bv?-1*dir:av>bv?1*dir:0; }
+    return (av-bv)*dir;
+  });
   return list;
 }
-
-function rowHtml(i){
-  var s=slug(i), c=SRC_COLOR[s]||'#3b82f6', an=analysisFor(i.id);
-  var right = tScore(i)>0
-    ? '<div class="row-amt money">▲ '+(i.traction.upvotes||0)+(i.traction.comments?' · 💬 '+i.traction.comments:'')+'</div>'
-    : '<div class="row-amt money" style="color:var(--text-muted)">—</div>';
-  return '<div class="row" onclick="openIdea('+i.id+')">'
-    +'<div class="avatar" style="background:'+c+'22;color:'+c+'">'+(SRC_SHORT[s]||'?')+'</div>'
-    +'<div class="row-main"><div class="row-title">'+esc(i.title)+'</div>'
-    +'<div class="row-sub">'+esc(i.sources?i.sources.name:'')
-    +(an?' · <span style="color:'+(an.verdict==='build'?'var(--positive)':an.verdict==='watch'?'var(--amber)':'var(--negative)')+';font-weight:600">'+an.verdict+'</span>':'')
-    +(i.description?' · '+esc(i.description.slice(0,90)):'')+'</div></div>'
-    +'<div class="row-right">'+right+'<div class="row-when">'+timeAgo(i.published_at)+'</div></div>'
-    +'</div>';
+function setSort(k){
+  if(state.sortKey===k){ state.sortDir=state.sortDir==='asc'?'desc':'asc'; }
+  else { state.sortKey=k; state.sortDir=(k==='idea')?'asc':'desc'; }
+  render();
 }
 
-function laneHtml(lane){
-  var isUs = lane==='us';
-  var slugs = isUs?US_LANE:DE_LANE;
-  var srcFilter = isUs?state.usSrc:state.deSrc;
-  var list = laneIdeas(lane);
-  var h='';
-
-  if(isUs){
-    h+='<div><h1 class="page-title">US Feed</h1><div class="page-sub">New US launches - for each one: does this exist in Germany yet? Auto-refresh 07:00 & 19:00.</div></div>';
-  } else {
-    h+='<div><h1 class="page-title">DE · EU Landscape</h1><div class="page-sub">Your reference layer - what already exists in the German and EU market. Use it to answer the Germany question.</div></div>';
-  }
-
-  var segs='<button class="'+(srcFilter==='all'?'on':'')+'" onclick="setSrc(\''+lane+'\',\'all\')">All</button>';
-  slugs.forEach(function(s){
-    var src=state.sources.find(function(x){return x.slug===s;});
-    if(src) segs+='<button class="'+(srcFilter===s?'on':'')+'" onclick="setSrc(\''+lane+'\',\''+s+'\')">'+esc(src.name)+'</button>';
+/* ---------- render ---------- */
+function render(){
+  ['screener','stats'].forEach(function(v){
+    var n=document.getElementById('nav-'+v); if(n) n.className='nav-item'+(state.view===v?' on':'');
+    var b=document.getElementById('bnav-'+v); if(b) b.className=(state.view===v?'on':'');
   });
-  h+='<div class="bar"><div class="seg">'+segs+'</div>'
-    +'<div class="seg"><button class="'+(state.sort==='new'?'on':'')+'" onclick="state.sort=\'new\';render()">Newest</button>'
-    +'<button class="'+(state.sort==='traction'?'on':'')+'" onclick="state.sort=\'traction\';render()">Traction</button></div>'
-    +'<input class="search" placeholder="Search…" value="'+esc(isUs?state.q:state.qDe)+'" oninput="setQ(\''+lane+'\',this.value)"></div>';
+  var m=document.getElementById('main');
+  if(!state.loaded){ m.innerHTML='<div class="spinner"></div>'; return; }
+  if(state.view==='stats') m.innerHTML=statsHtml();
+  else m.innerHTML=screenerHtml();
+}
 
-  if(!list.length){ h+='<div class="card"><div class="empty"><div class="t">No ideas match</div><div class="h">Try clearing filters - the scraper adds new ones twice a day</div></div></div>'; }
-  else { h+='<div class="card" style="padding:6px 10px"><div class="rows">'+list.map(rowHtml).join('')+'</div></div>'; }
+function stCell(i){
+  var s=deStatus(i);
+  if(s==='gap') return '<span class="st gap"><span class="dt" style="background:var(--positive)"></span>Gap</span>';
+  if(s==='exists') return '<span class="st exists"><span class="dt" style="background:var(--negative)"></span>Exists</span>';
+  return '<span class="st unknown"><span class="dt" style="background:var(--text-muted)"></span>Unknown</span>';
+}
+function vCell(i){
+  var v=verdictOf(i);
+  if(!v) return '<span class="st none">—</span>';
+  return '<span class="st '+v+'">'+v+'</span>';
+}
+function tractionCell(i){
+  var t=i.traction||{};
+  if(tScore(i)<=0) return '<div class="cell-num mut">—</div>';
+  return '<div class="cell-num money">▲ '+(t.upvotes||0)+(t.comments?' · '+t.comments+'c':'')+'</div>';
+}
+function rowHtml(i){
+  var s=slug(i), c=SRC_COLOR[s]||'#3b82f6';
+  var sel=state.current&&state.current.id===i.id?' sel':'';
+  return '<div class="trow'+sel+'" onclick="openIdea('+i.id+')">'
+    +'<div class="cell-idea">'
+      +'<div class="avatar" style="background:'+c+'22;color:'+c+'">'+(SRC_SHORT[s]||'?')+'</div>'
+      +'<div class="idea-main"><div class="idea-title">'+esc(i.title)+'</div>'
+      +'<div class="idea-sub">'+esc(i.sources?i.sources.name:'')+(i.description?' · '+esc(i.description.slice(0,70)):'')+'</div></div>'
+    +'</div>'
+    +tractionCell(i)
+    +'<div class="cell-num mut col-age">'+(timeAgo(i.published_at)||'—')+'</div>'
+    +'<div>'+stCell(i)+'</div>'
+    +'<div>'+vCell(i)+'</div>'
+  +'</div>';
+}
+function th(key,label,num){
+  var act=state.sortKey===key;
+  var arr=state.sortDir==='asc'?'▲':'▼';
+  return '<div class="th'+(num?' num':'')+(act?' act':'')+(key==='age'?' col-age':'')+'" onclick="setSort(\''+key+'\')">'+label+' <span class="arr">'+arr+'</span></div>';
+}
+function screenerHtml(){
+  var list=screenIdeas();
+  var h='<div class="page-head"><div>'
+    +'<h1 class="page-title">Screener</h1>'
+    +'<div class="page-sub">Work the market, not a feed. Every US launch: does it already exist in Germany? Set the DE-status, then run the timed analysis. Auto-refreshes 07:00 &amp; 19:00.</div>'
+    +'</div></div>';
+
+  // lane toggle
+  h+='<div class="bar">'
+    +'<div class="seg">'
+      +'<button class="'+(state.lane==='us'?'on':'')+'" onclick="setLane(\'us\')">🇺🇸 US launches</button>'
+      +'<button class="'+(state.lane==='de'?'on':'')+'" onclick="setLane(\'de\')">🇩🇪 DE · EU</button>'
+      +'<button class="'+(state.lane==='all'?'on':'')+'" onclick="setLane(\'all\')">All</button>'
+    +'</div>';
+  // source filter
+  var laneSlugs = state.lane==='de'?DE_LANE:(state.lane==='us'?US_LANE:US_LANE.concat(DE_LANE));
+  var segs='<button class="'+(state.src==='all'?'on':'')+'" onclick="setSrc(\'all\')">All sources</button>';
+  laneSlugs.forEach(function(s){
+    var src=state.sources.find(function(x){return x.slug===s;});
+    if(src) segs+='<button class="'+(state.src===s?'on':'')+'" onclick="setSrc(\''+s+'\')">'+esc(src.name)+'</button>';
+  });
+  h+='<div class="seg">'+segs+'</div>'
+    +'<div class="seg"><button class="'+(state.unanalyzed?'on':'')+'" onclick="state.unanalyzed=!state.unanalyzed;render()">Unanalyzed only</button></div>'
+    +'<input class="search" placeholder="Search ideas…" value="'+esc(state.q)+'" oninput="setQ(this.value)">'
+    +'<span class="count-chip">'+list.length+' idea'+(list.length===1?'':'s')+'</span>'
+  +'</div>';
+
+  if(!list.length){
+    h+='<div class="tbl"><div class="empty"><div class="t">No ideas match</div><div class="h">Clear filters — the scraper adds new ones twice a day</div></div></div>';
+    return h;
+  }
+  h+='<div class="tbl" style="--cols:'+COLS+'">'
+    +'<div class="trow thead">'
+      +th('idea','Idea')
+      +'<div class="th num'+(state.sortKey==='traction'?' act':'')+'" onclick="setSort(\'traction\')">Traction <span class="arr">'+(state.sortDir==='asc'?'▲':'▼')+'</span></div>'
+      +th('age','Age',true)
+      +th('de','DE-status')
+      +th('verdict','Verdict')
+    +'</div>'
+    +'<div class="tbody">'+list.map(rowHtml).join('')+'</div>'
+  +'</div>';
   return h;
 }
-function setSrc(lane,s){ if(lane==='us') state.usSrc=s; else state.deSrc=s; render(); }
-function setQ(lane,v){
-  if(lane==='us') state.q=v; else state.qDe=v;
-  clearTimeout(window.__qT); window.__qT=setTimeout(render,250);
-}
-function heroCount(){
-  var el=document.getElementById('hero-n');
-  if(el) countUp(el, parseInt(el.getAttribute('data-n'),10)||0);
-}
+function setLane(l){ state.lane=l; state.src='all'; render(); }
+function setSrc(s){ state.src=s; render(); }
+function setQ(v){ state.q=v; clearTimeout(window.__qT); window.__qT=setTimeout(render,220); }
 
+/* ---------- drawer ---------- */
+function openIdea(id){
+  state.current=state.ideas.find(function(i){return i.id===id;});
+  state.run=null;
+  renderDrawer();
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('drawer').classList.add('show');
+  render(); // reflect selected row
+}
+function closeDrawer(){
+  if(state.run&&state.run.timerId) clearInterval(state.run.timerId);
+  state.current=null; state.run=null;
+  var o=document.getElementById('overlay'), d=document.getElementById('drawer');
+  if(o) o.classList.remove('show'); if(d) d.classList.remove('show');
+  if(state.loaded&&state.view!=='stats') render();
+}
+function renderDrawer(){
+  var inner=document.getElementById('drawer-inner');
+  inner.innerHTML = state.run ? analyzeHtml() : detailHtml();
+  if(state.run) bindStep();
+}
 function deLinks(i){
   var t=encodeURIComponent(i.title||'');
-  return '<div class="card"><div class="section-label">🇩🇪 Does this exist in Germany?</div><div class="de-links">'
+  return '<div class="section-label">🇩🇪 Does this exist in Germany?</div><div class="de-links">'
     +'<a target="_blank" rel="noopener" href="https://www.google.de/search?q='+t+'+Deutschland">Google.de: title + Deutschland</a>'
     +'<a target="_blank" rel="noopener" href="https://www.google.de/search?q='+t+'+deutsche+alternative">Google.de: deutsche Alternative</a>'
     +'<a target="_blank" rel="noopener" href="https://www.deutsche-startups.de/?s='+t+'">deutsche-startups.de</a>'
     +'<a target="_blank" rel="noopener" href="https://www.eu-startups.com/?s='+t+'">eu-startups.com</a>'
-    +'</div></div>';
+    +'</div>';
 }
-
 function detailHtml(){
-  var i=state.current; if(!i) return laneHtml('us');
+  var i=state.current; if(!i) return '';
   var an=analysisFor(i.id), s=slug(i), c=SRC_COLOR[s]||'#3b82f6';
-  var isUs = US_LANE.indexOf(s)>=0;
-  return '<button class="back" onclick="go(state.backTo)">← back</button>'
-    +'<div class="card">'
+  var isUs=laneOf(i)==='us', ds=deStatus(i);
+  var h='<div class="drawer-head"><span class="dtag">'+(isUs?'🇺🇸 US launch':'🇩🇪 DE · EU')+'</span>'
+    +'<button class="iconbtn" onclick="closeDrawer()">✕</button></div>'
+    +'<div class="drawer-body">'
     +'<h2 class="detail-title">'+esc(i.title)+'</h2>'
     +'<div class="meta"><span class="pill" style="background:'+c+'22;color:'+c+'">'+esc(i.sources?i.sources.name:'')+'</span>'
     +(tScore(i)>0?'<span class="money">▲ '+(i.traction.upvotes||0)+' · 💬 '+(i.traction.comments||0)+'</span>':'')
     +'<span>'+timeAgo(i.published_at)+' ago</span>'
-    +(an?'<span class="pill" style="background:var(--surface);color:'+(an.verdict==='build'?'var(--positive)':an.verdict==='watch'?'var(--amber)':'var(--negative)')+'">analyzed: '+an.verdict+'</span>':'')
-    +(i.tags&&i.tags.length?i.tags.slice(0,6).map(function(t){return '<span class="pill neutral">'+esc(t)+'</span>';}).join(''):'')
+    +(an?'<span class="st '+an.verdict+'">'+an.verdict+'</span>':'')
+    +(i.tags&&i.tags.length?i.tags.slice(0,5).map(function(t){return '<span class="pill neutral">'+esc(t)+'</span>';}).join(''):'')
     +'</div>'
-    +(i.description?'<p class="desc">'+esc(i.description)+'</p>':'<p class="desc">(no description - open the link)</p>')
-    +'<div class="btnrow" style="margin-top:18px">'
+    +(i.description?'<p class="desc">'+esc(i.description)+'</p>':'<p class="desc">(no description — open the link)</p>')
+    +'<div class="btnrow">'
     +(i.url?'<a class="btn outline" href="'+esc(i.url)+'" target="_blank" rel="noopener">Open link ↗</a>':'')
     +(i.traction&&i.traction.hn_url?'<a class="btn outline" href="'+esc(i.traction.hn_url)+'" target="_blank" rel="noopener">HN thread ↗</a>':'')
-    +'<button class="btn primary" onclick="startRun()">'+(an?'Analyze again':'Analyze')+' ⏱</button>'
-    +'</div></div>'
-    +(isUs?deLinks(i):'');
+    +'</div>';
+  // DE-status quick setter
+  h+='<div class="section-label">DE-status — does it already exist in Germany?</div>'
+    +'<div class="setter">'
+    +'<button class="exists'+(ds==='exists'?' sel':'')+'" onclick="setDe(\'exists\')">● Exists in DE</button>'
+    +'<button class="gap'+(ds==='gap'?' sel':'')+'" onclick="setDe(\'gap\')">● Gap — opportunity</button>'
+    +'<button class="unknown'+(ds==='unknown'?' sel':'')+'" onclick="setDe(\'unknown\')">○ Unknown</button>'
+    +'</div>';
+  h+=deLinks(i);
+  h+='<div class="btnrow"><button class="btn primary" style="flex:1" onclick="startRun()">'+(an?'Analyze again':'Start timed analysis')+' ⏱</button></div>';
+  h+='</div>';
+  return h;
+}
+function setDe(v){
+  var i=state.current; if(!i) return;
+  var prev=i.de_status; i.de_status=v; // optimistic
+  renderDrawer(); render();
+  if(!state.deColSupported){ toast('DE-status saved locally (column not deployed yet)', true); return; }
+  api('/rest/v1/ideas?id=eq.'+i.id,{method:'PATCH',body:JSON.stringify({de_status:v})})
+    .then(function(){ toast('DE-status: '+v); })
+    .catch(function(e){ i.de_status=prev; renderDrawer(); render(); toast('Save failed: '+e.message,true); });
 }
 
 /* ---------- analyze ---------- */
 function startRun(){
   state.run={step:0, notes:{}, verdict:null, stepStart:Date.now(), runStart:Date.now(), perStep:{}, timerId:null};
-  go('analyze');
+  renderDrawer();
 }
 function analyzeHtml(){
   var r=state.run, s=STEPS[r.step], i=state.current;
   var pct=Math.round(r.step/STEPS.length*100);
-  var h='<button class="back" onclick="abortRun()">✕ abort analysis</button>'
+  var h='<div class="drawer-head"><span class="dtag">⏱ Analyzing · '+esc(i.title.slice(0,32))+'</span>'
+    +'<button class="iconbtn" onclick="abortRun()">✕</button></div>'
+    +'<div class="drawer-body">'
     +'<div class="progress"><div style="width:'+pct+'%"></div></div>'
-    +'<div style="font-size:13px;color:var(--text-muted)">'+esc(i.title)+'</div>'
-    +'<div class="card"><span class="timer" id="timer">'+s.sec+'s</span>'
+    +'<div><span class="timer" id="timer">'+s.sec+'s</span>'
     +'<div class="qnum">Step '+(r.step+1)+' / '+STEPS.length+' · target '+s.sec+'s</div>'
-    +'<h3 class="q-title">'+s.title+'</h3><div class="q-hint">'+s.hint+'</div>';
+    +'<h3 class="q-title">'+s.title+'</h3><div class="q-hint">'+s.hint+'</div></div>';
   if(s.key==='verdict'){
     h+='<div class="vrow">'
       +'<button class="btn good'+(r.verdict==='build'?' sel':'')+'" onclick="setV(\'build\')">BUILD</button>'
       +'<button class="btn warn'+(r.verdict==='watch'?' sel':'')+'" onclick="setV(\'watch\')">WATCH</button>'
       +'<button class="btn bad'+(r.verdict==='skip'?' sel':'')+'" onclick="setV(\'skip\')">SKIP</button></div>'
       +'<textarea id="note" placeholder="One-line reason…">'+esc(r.notes.verdict_reason||'')+'</textarea>'
-      +'<div class="btnrow" style="margin-top:14px"><button class="btn primary" onclick="nextStep()">Save analysis ✓</button></div>';
+      +'<div class="btnrow"><button class="btn primary" style="flex:1" onclick="nextStep()">Save analysis ✓</button></div>';
   } else {
-    h+='<textarea id="note" placeholder="Your quick take…">'+esc(r.notes[s.key]||'')+'</textarea>'
-      +'<div class="btnrow" style="margin-top:14px"><button class="btn primary" onclick="nextStep()">Next →</button></div>';
+    h+='<textarea id="note" placeholder="Your quick take…">'+esc(r.notes[s.key]||'')+'</textarea>';
+    if(s.key==='dach_fit'){
+      var ds=deStatus(i);
+      h+='<div class="setter" style="margin-top:12px">'
+        +'<button class="exists'+(ds==='exists'?' sel':'')+'" onclick="setDe(\'exists\')">● Exists</button>'
+        +'<button class="gap'+(ds==='gap'?' sel':'')+'" onclick="setDe(\'gap\')">● Gap</button>'
+        +'<button class="unknown'+(ds==='unknown'?' sel':'')+'" onclick="setDe(\'unknown\')">○ Unknown</button>'
+        +'</div>';
+    }
+    h+='<div class="btnrow"><button class="btn primary" style="flex:1" onclick="nextStep()">Next →</button></div>';
   }
-  h+='</div>';
   if(s.key==='dach_fit'){ h+=deLinks(i); }
+  h+='</div>';
   return h;
 }
 function bindStep(){
-  var r=state.run;
+  var r=state.run; if(!r) return;
   if(r.timerId) clearInterval(r.timerId);
   r.timerId=setInterval(function(){
     var el=document.getElementById('timer'); if(!el){clearInterval(r.timerId);return;}
@@ -430,9 +539,10 @@ function bindStep(){
   },250);
   var n=document.getElementById('note'); if(n) n.focus();
 }
-function setV(v){ state.run.verdict=v; saveNote(); render(); }
+function setV(v){ state.run.verdict=v; saveNote(); renderDrawer(); }
 function saveNote(){
-  var r=state.run, s=STEPS[r.step], n=document.getElementById('note');
+  var r=state.run; if(!r) return;
+  var s=STEPS[r.step], n=document.getElementById('note');
   if(n){ if(s.key==='verdict') r.notes.verdict_reason=n.value; else r.notes[s.key]=n.value; }
 }
 function nextStep(){
@@ -443,11 +553,11 @@ function nextStep(){
     if(!r.verdict){ toast('Pick build / watch / skip', true); return; }
     finishRun(); return;
   }
-  r.step++; r.stepStart=Date.now(); render();
+  r.step++; r.stepStart=Date.now(); renderDrawer();
 }
 function abortRun(){
   if(state.run&&state.run.timerId) clearInterval(state.run.timerId);
-  state.run=null; go('detail');
+  state.run=null; renderDrawer();
 }
 function finishRun(){
   var r=state.run;
@@ -458,7 +568,7 @@ function finishRun(){
     .then(function(rows){
       state.analyses.unshift(rows[0]);
       toast('Saved: '+r.verdict.toUpperCase()+' in '+payload.duration_seconds+'s');
-      state.run=null; go('detail');
+      state.run=null; renderDrawer(); render();
     })
     .catch(function(e){ toast('Save failed: '+e.message, true); });
 }
@@ -466,21 +576,26 @@ function finishRun(){
 /* ---------- stats ---------- */
 function statsHtml(){
   var a=state.analyses;
-  var h='<div><h1 class="page-title">Training Stats</h1><div class="page-sub">Target: 4.5 min per idea. Faster with practice - that is the training.</div></div>';
-  if(!a.length) return h+'<div class="card"><div class="empty"><div class="t">No analyses yet</div><div class="h">Open an idea in the US Feed and hit Analyze</div></div></div>';
+  var h='<div class="page-head"><div><h1 class="page-title">Training Stats</h1>'
+    +'<div class="page-sub">Target: 4.5 min per idea. Faster with practice — that is the training.</div></div></div>';
+  if(!a.length) return h+'<div class="card"><div class="empty"><div class="t">No analyses yet</div><div class="h">Open an idea in the Screener and hit Analyze</div></div></div>';
   var avg=Math.round(a.reduce(function(s,x){return s+(x.duration_seconds||0);},0)/a.length);
   var counts={build:0,watch:0,skip:0};
   a.forEach(function(x){ if(counts[x.verdict]!=null) counts[x.verdict]++; });
   var today=new Date().toDateString();
   var todayN=a.filter(function(x){return new Date(x.created_at).toDateString()===today;}).length;
   var tot=counts.build+counts.watch+counts.skip||1;
+  // DE-status distribution across all ideas
+  var de={gap:0,exists:0,unknown:0};
+  state.ideas.forEach(function(i){ var d=deStatus(i); if(de[d]!=null) de[d]++; });
   h+='<div class="kpis">'
     +'<div class="kpi"><div class="l">Total analyses</div><div class="v money">'+a.length+'</div></div>'
     +'<div class="kpi"><div class="l">Today</div><div class="v money">'+todayN+'</div></div>'
     +'<div class="kpi"><div class="l">Avg time</div><div class="v money">'+Math.floor(avg/60)+':'+('0'+avg%60).slice(-2)+'</div></div>'
     +'<div class="kpi"><div class="l">Build rate</div><div class="v money" style="color:var(--positive)">'+Math.round(counts.build/tot*100)+'%</div></div>'
+    +'<div class="kpi"><div class="l">🇩🇪 Gaps found</div><div class="v money" style="color:var(--positive)">'+de.gap+'</div></div>'
     +'</div>'
-    +'<div class="card"><div class="section-label">Verdicts</div>'
+    +'<div class="card" style="margin-top:16px"><div class="section-label" style="margin-top:0">Verdicts</div>'
     +'<div class="vbar">'
     +'<div style="width:'+(counts.build/tot*100)+'%;background:var(--positive)"></div>'
     +'<div style="width:'+(counts.watch/tot*100)+'%;background:var(--amber)"></div>'
@@ -492,6 +607,9 @@ function statsHtml(){
     +'</div></div>';
   return h;
 }
+
+/* keyboard: Esc closes drawer */
+document.addEventListener('keydown',function(e){ if(e.key==='Escape') closeDrawer(); });
 
 load(); render();
 </script>
