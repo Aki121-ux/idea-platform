@@ -288,7 +288,6 @@ function render(){
   else if(state.view==='detail') m.innerHTML=detailHtml();
   else if(state.view==='analyze') m.innerHTML=analyzeHtml();
   else if(state.view==='stats') m.innerHTML=statsHtml();
-  if(state.view==='feed') heroCount();
   if(state.view==='analyze') bindStep();
 }
 
@@ -329,14 +328,7 @@ function laneHtml(lane){
   var h='';
 
   if(isUs){
-    var today = state.ideas.filter(function(i){
-      return US_LANE.indexOf(slug(i))>=0 && i.published_at && (Date.now()-new Date(i.published_at).getTime())<86400000;
-    }).length;
-    h+='<div class="hero"><div class="blob" style="width:220px;height:220px;top:-80px;right:-60px"></div>'
-      +'<div class="blob" style="width:160px;height:160px;bottom:-70px;left:-40px"></div>'
-      +'<div class="label">New US launches · last 24h</div>'
-      +'<div class="big money" id="hero-n" data-n="'+today+'">0</div>'
-      +'<div class="sub">The question for every single one: does this exist in Germany yet? · auto-refresh 07:00 & 19:00</div></div>';
+    h+='<div><h1 class="page-title">US Feed</h1><div class="page-sub">New US launches - for each one: does this exist in Germany yet? Auto-refresh 07:00 & 19:00.</div></div>';
   } else {
     h+='<div><h1 class="page-title">DE · EU Landscape</h1><div class="page-sub">Your reference layer - what already exists in the German and EU market. Use it to answer the Germany question.</div></div>';
   }
