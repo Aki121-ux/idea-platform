@@ -1,77 +1,197 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Idea Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0f1115;--panel:#181b22;--panel2:#1f232d;--border:#2a2f3a;--text:#e8eaf0;--dim:#8b93a5;--accent:#5b8cff;--green:#3fb970;--amber:#e0a83e;--red:#e05252}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;line-height:1.5}
+:root {
+  --bg:#ffffff; --surface:#f6f7f9; --card:#ffffff;
+  --text:#0a0a0a; --text-muted:#6b7280; --border:#ececf0;
+  --accent:#2563eb; --positive:#16a34a; --negative:#ef4444; --amber:#eab308;
+  --radius:18px; --radius-lg:24px; --radius-pill:9999px;
+  --shadow:0 1px 3px rgba(0,0,0,.06), 0 8px 24px rgba(0,0,0,.04);
+  --font:"Inter",system-ui,sans-serif;
+}
+:root[data-theme="dark"] {
+  --bg:#0a0b0d; --surface:#141518; --card:#1a1c20;
+  --text:#f5f5f7; --text-muted:#9aa0a6; --border:#26282d;
+  --accent:#3b82f6;
+  --shadow:0 1px 3px rgba(0,0,0,.4), 0 8px 24px rgba(0,0,0,.3);
+}
+*{box-sizing:border-box;border-color:var(--border)}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--font);-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 a{color:var(--accent);text-decoration:none}
-header{position:sticky;top:0;background:rgba(15,17,21,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;gap:16px;z-index:10}
-header h1{font-size:17px;font-weight:700;letter-spacing:.3px;cursor:pointer}
-header h1 span{color:var(--accent)}
-nav{display:flex;gap:4px;margin-left:auto}
-nav button{background:none;border:none;color:var(--dim);font-size:14px;padding:6px 12px;border-radius:8px;cursor:pointer}
-nav button.on{background:var(--panel2);color:var(--text)}
-main{max-width:860px;margin:0 auto;padding:20px}
-.bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
-.bar select,.bar input{background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 10px;font-size:14px}
-.bar input{flex:1;min-width:140px}
-.card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin-bottom:10px;cursor:pointer;transition:border-color .15s}
-.card:hover{border-color:var(--accent)}
-.card h3{font-size:15px;font-weight:600;margin-bottom:4px}
-.card p{font-size:13px;color:var(--dim);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:8px;font-size:12px;color:var(--dim)}
-.badge{background:var(--panel2);border:1px solid var(--border);border-radius:20px;padding:2px 9px;font-size:11px;color:var(--dim)}
-.badge.src{color:var(--accent);border-color:#33406a}
-.badge.done{color:var(--green);border-color:#2a4a38}
-.badge.v-build{color:var(--green)}.badge.v-watch{color:var(--amber)}.badge.v-skip{color:var(--red)}
-.tr{color:var(--amber)}
-.empty{color:var(--dim);text-align:center;padding:60px 0}
-.detail h2{font-size:20px;margin-bottom:10px}
-.detail .desc{color:var(--dim);font-size:14px;margin:14px 0;white-space:pre-wrap}
-.btn{display:inline-block;background:var(--accent);color:#fff;border:none;border-radius:10px;padding:10px 18px;font-size:14px;font-weight:600;cursor:pointer}
-.btn.ghost{background:var(--panel2);color:var(--text);border:1px solid var(--border)}
-.btn.green{background:var(--green)}.btn.amber{background:var(--amber);color:#1a1500}.btn.red{background:var(--red)}
-.btnrow{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
-.back{color:var(--dim);font-size:13px;cursor:pointer;margin-bottom:14px;display:inline-block}
-.an-step{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:20px}
-.an-step .qnum{font-size:12px;color:var(--dim);letter-spacing:1px;text-transform:uppercase}
-.an-step h3{font-size:18px;margin:6px 0 2px}
-.an-step .hint{font-size:13px;color:var(--dim);margin-bottom:14px}
-.timer{font-variant-numeric:tabular-nums;font-size:28px;font-weight:700;float:right}
-.timer.over{color:var(--red)}
-textarea{width:100%;background:var(--panel2);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:10px;font-size:14px;font-family:inherit;min-height:90px;resize:vertical}
+.money{font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+
+/* layout */
+.shell{display:flex;min-height:100vh}
+.sidebar{position:fixed;inset:0 auto 0 0;width:240px;background:var(--card);border-right:1px solid var(--border);padding:20px 12px;display:flex;flex-direction:column;gap:4px;z-index:20}
+.brand{font-size:19px;font-weight:800;letter-spacing:-.02em;padding:4px 12px 18px}
+.brand span{color:var(--accent)}
+.nav-item{display:flex;align-items:center;gap:12px;border-radius:var(--radius);padding:10px 12px;font-size:14px;font-weight:500;color:var(--text-muted);cursor:pointer;transition:all .15s ease;border:none;background:none;font-family:inherit;text-align:left;width:100%}
+.nav-item:hover{background:var(--surface);color:var(--text)}
+.nav-item.on{background:var(--surface);color:var(--text);font-weight:600}
+.nav-item svg{width:18px;height:18px;flex:none}
+.nav-spacer{flex:1}
+.theme-btn{display:flex;align-items:center;gap:12px;border-radius:var(--radius);padding:10px 12px;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:1px solid var(--border);background:none;font-family:inherit;transition:all .15s ease}
+.theme-btn:hover{background:var(--surface);color:var(--text)}
+.content{flex:1;margin-left:240px;padding:28px 20px 90px}
+.wrap{max-width:768px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.page-title{font-size:24px;font-weight:800;letter-spacing:-.02em;margin:0}
+.page-sub{font-size:12px;color:var(--text-muted);margin-top:4px}
+
+/* mobile */
+.bottombar{display:none}
+@media (max-width:800px){
+  .sidebar{display:none}
+  .content{margin-left:0;padding:20px 14px 90px}
+  .bottombar{display:flex;position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb, var(--card) 95%, transparent);backdrop-filter:blur(10px);border-top:1px solid var(--border);z-index:20}
+  .bottombar button{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 0 12px;font-size:10px;font-weight:600;color:var(--text-muted);background:none;border:none;font-family:inherit;cursor:pointer}
+  .bottombar button.on{color:var(--accent)}
+  .bottombar svg{width:20px;height:20px}
+}
+
+/* card */
+.card{border-radius:var(--radius);background:var(--card);box-shadow:var(--shadow);border:1px solid var(--border);padding:16px}
+@media(min-width:640px){.card{padding:20px}}
+
+/* hero */
+.hero{position:relative;overflow:hidden;border-radius:var(--radius-lg);padding:24px;color:#fff;box-shadow:var(--shadow);background:linear-gradient(135deg,var(--accent) 0%,#6d28d9 55%,#9333ea 100%)}
+@media(min-width:640px){.hero{padding:32px}}
+.hero .blob{position:absolute;border-radius:50%;background:rgba(255,255,255,.1);filter:blur(32px)}
+.hero .label{font-size:12px;font-weight:500;color:rgba(255,255,255,.8)}
+.hero .big{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin:4px 0}
+.hero .sub{font-size:12px;color:rgba(255,255,255,.7)}
+
+/* controls */
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.seg{display:flex;gap:4px;border-radius:12px;background:var(--surface);padding:3px}
+.seg button{border-radius:9px;padding:5px 11px;font-size:12px;font-weight:500;color:var(--text-muted);background:none;border:none;font-family:inherit;cursor:pointer;white-space:nowrap;transition:all .15s ease}
+.seg button.on{background:var(--card);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.08);font-weight:600}
+.search{flex:1;min-width:150px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);padding:9px 14px;font-size:14px;color:var(--text);outline:none;font-family:inherit}
+.search::placeholder{color:var(--text-muted)}
+.search:focus{border-color:var(--accent)}
+
+/* list rows */
+.rows{display:flex;flex-direction:column}
+.rows .row + .row{border-top:1px solid var(--border)}
+.row{display:flex;align-items:center;gap:12px;padding:12px 8px;border-radius:var(--radius);cursor:pointer;transition:background .15s ease}
+.row:hover{background:var(--surface)}
+.avatar{height:40px;width:40px;border-radius:var(--radius-pill);display:grid;place-items:center;font-size:13px;font-weight:700;flex:none}
+.row-main{flex:1;min-width:0}
+.row-title{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.row-sub{font-size:12px;color:var(--text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.row-right{text-align:right;flex:none}
+.row-amt{font-size:14px;font-weight:600}
+.row-when{font-size:11px;color:var(--text-muted);margin-top:1px}
+.pill{display:inline-flex;align-items:center;border-radius:var(--radius-pill);padding:2px 8px;font-size:11px;font-weight:600}
+.pill.neutral{background:var(--surface);color:var(--text-muted)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border-radius:var(--radius);padding:10px 16px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer;transition:all .15s ease;border:none;text-decoration:none}
+.btn.primary{background:var(--accent);color:#fff}
+.btn.primary:hover{opacity:.9}
+.btn.outline{border:1px solid var(--border);background:transparent;color:var(--text)}
+.btn.outline:hover{background:var(--surface)}
+.btn.good{background:var(--positive);color:#fff}
+.btn.warn{background:var(--amber);color:#221a00}
+.btn.bad{background:var(--negative);color:#fff}
+.btnrow{display:flex;gap:10px;flex-wrap:wrap}
+
+/* detail */
+.detail-title{font-size:22px;font-weight:800;letter-spacing:-.02em;margin:0 0 8px}
+.meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;font-size:12px;color:var(--text-muted)}
+.desc{font-size:14px;color:var(--text-muted);line-height:1.6;white-space:pre-wrap;margin:14px 0 0}
+.back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--text-muted);cursor:pointer;background:none;border:none;font-family:inherit;padding:0}
+.back:hover{color:var(--text)}
+.section-label{font-size:13px;font-weight:600;margin:0 0 10px}
+.de-links{display:flex;gap:8px;flex-wrap:wrap}
+.de-links a{display:inline-flex;align-items:center;gap:6px;border-radius:var(--radius-pill);border:1px solid var(--border);background:var(--surface);padding:7px 13px;font-size:12px;font-weight:600;color:var(--text)}
+.de-links a:hover{border-color:var(--accent);color:var(--accent)}
+
+/* analyze */
+.progress{height:4px;border-radius:2px;background:var(--surface);overflow:hidden}
+.progress div{height:100%;background:var(--accent);transition:width .3s ease}
+.timer{font-variant-numeric:tabular-nums;font-size:32px;font-weight:800;letter-spacing:-.02em;float:right;color:var(--accent)}
+.timer.over{color:var(--negative)}
+.qnum{font-size:11px;font-weight:600;color:var(--text-muted);letter-spacing:.6px;text-transform:uppercase}
+.q-title{font-size:19px;font-weight:800;letter-spacing:-.02em;margin:6px 0 2px}
+.q-hint{font-size:13px;color:var(--text-muted);margin-bottom:14px}
+textarea{width:100%;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--text);padding:12px 14px;font-size:14px;font-family:inherit;min-height:96px;resize:vertical;outline:none}
+textarea:focus{border-color:var(--accent)}
 .vrow{display:flex;gap:10px;margin:12px 0}
-.vrow .btn{flex:1;opacity:.45}
-.vrow .btn.sel{opacity:1;outline:2px solid #fff3}
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:20px}
-.stat{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:16px;text-align:center}
-.stat .n{font-size:26px;font-weight:700}
-.stat .l{font-size:12px;color:var(--dim)}
-.progress{height:4px;background:var(--panel2);border-radius:2px;margin-bottom:16px;overflow:hidden}
-.progress div{height:100%;background:var(--accent);transition:width .3s}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--green);color:#fff;padding:10px 20px;border-radius:10px;font-size:14px;opacity:0;transition:opacity .3s;pointer-events:none}
+.vrow .btn{flex:1;opacity:.4}
+.vrow .btn.sel{opacity:1;outline:2px solid color-mix(in srgb, var(--text) 25%, transparent)}
+
+/* stats */
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}
+.kpi{border-radius:var(--radius);border:1px solid var(--border);background:var(--card);padding:16px;box-shadow:var(--shadow)}
+.kpi .l{font-size:12px;font-weight:500;color:var(--text-muted)}
+.kpi .v{font-size:22px;font-weight:700;letter-spacing:-.02em;margin-top:2px}
+.vbar{display:flex;height:10px;border-radius:var(--radius-pill);overflow:hidden;background:var(--surface)}
+.legend{display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--text-muted)}
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px}
+
+/* states */
+.empty{text-align:center;padding:64px 0}
+.empty .t{font-size:14px;font-weight:600}
+.empty .h{font-size:12px;color:var(--text-muted);margin-top:4px}
+.spinner{height:24px;width:24px;border-radius:50%;border:2px solid var(--border);border-top-color:var(--accent);animation:spin .8s linear infinite;margin:64px auto}
+@keyframes spin{to{transform:rotate(360deg)}}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:var(--positive);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:50;box-shadow:var(--shadow)}
 .toast.show{opacity:1}
 </style>
 </head>
 <body>
-<header>
-  <h1 onclick="go('feed')">idea<span>·platform</span></h1>
-  <nav>
-    <button id="nav-feed" onclick="go('feed')">Feed</button>
-    <button id="nav-stats" onclick="go('stats')">Stats</button>
-  </nav>
-</header>
-<main id="main"><div class="empty">Loading ideas…</div></main>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">idea<span>·</span>platform</div>
+    <button class="nav-item" id="nav-feed" onclick="go('feed')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+      US Feed</button>
+    <button class="nav-item" id="nav-landscape" onclick="go('landscape')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+      DE · EU Landscape</button>
+    <button class="nav-item" id="nav-stats" onclick="go('stats')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+      Training Stats</button>
+    <div class="nav-spacer"></div>
+    <button class="theme-btn" onclick="toggleTheme()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <span id="theme-label">Dark mode</span></button>
+  </aside>
+
+  <main class="content"><div class="wrap" id="main"><div class="spinner"></div></div></main>
+</div>
+
+<nav class="bottombar">
+  <button id="bnav-feed" onclick="go('feed')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+    US Feed</button>
+  <button id="bnav-landscape" onclick="go('landscape')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+    DE · EU</button>
+  <button id="bnav-stats" onclick="go('stats')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+    Stats</button>
+</nav>
+
 <div class="toast" id="toast"></div>
+
 <script>
 var SB_URL = "https://uyeefonkkkqkybeoelpz.supabase.co";
 var SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV5ZWVmb25ra2txa3liZW9lbHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwNjA5MTEsImV4cCI6MjA5ODYzNjkxMX0.HUJHWr0UrmnXc0By_seAs6O_rtytLWxiFF8-MJiZRQg";
-var state = {view:'feed', ideas:[], sources:[], analyses:[], src:'all', sort:'new', q:'', current:null,
-  run:null};
+
+var US_LANE = ['hn-show','producthunt','techcrunch'];
+var DE_LANE = ['deutsche-startups','eu-startups'];
+var SRC_COLOR = {'hn-show':'#f97316','producthunt':'#ec4899','techcrunch':'#16a34a','deutsche-startups':'#a855f7','eu-startups':'#06b6d4'};
+var SRC_SHORT = {'hn-show':'HN','producthunt':'PH','techcrunch':'TC','deutsche-startups':'DS','eu-startups':'EU'};
+
+var state = {view:'feed', ideas:[], sources:[], analyses:[], loaded:false,
+  usSrc:'all', deSrc:'all', sort:'new', q:'', qDe:'', current:null, backTo:'feed', run:null};
 
 var STEPS = [
   {key:'problem', title:'Problem', hint:'Who hurts, and how badly?', sec:30},
@@ -79,10 +199,11 @@ var STEPS = [
   {key:'why_now', title:'Why now', hint:'What changed? Tech, regulation, or behavior.', sec:30},
   {key:'market_size', title:'Market size', hint:'Order-of-magnitude estimate. Niche, mid, or huge?', sec:30},
   {key:'moat', title:'Moat', hint:'What stops copycats in 6 months?', sec:30},
-  {key:'dach_fit', title:'Germany / DACH fit', hint:'Does it exist in DE already? Language barrier as edge? Localization cost?', sec:60},
+  {key:'dach_fit', title:'Germany fit', hint:'Does it exist in DE already? Check the links you just saw. Language barrier as YOUR edge? Localization cost?', sec:60},
   {key:'verdict', title:'Verdict', hint:'Build, watch, or skip - plus a one-line reason.', sec:15}
 ];
 
+/* ---------- helpers ---------- */
 function api(path, opts){
   opts = opts || {};
   opts.headers = Object.assign({apikey:SB_KEY, Authorization:'Bearer '+SB_KEY, 'Content-Type':'application/json'}, opts.headers||{});
@@ -94,116 +215,215 @@ function api(path, opts){
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
 function timeAgo(iso){
   if(!iso) return '';
-  var d = (Date.now()-new Date(iso).getTime())/1000;
-  if(d<3600) return Math.max(1,Math.round(d/60))+'m ago';
-  if(d<86400) return Math.round(d/3600)+'h ago';
-  return Math.round(d/86400)+'d ago';
+  var d=(Date.now()-new Date(iso).getTime())/1000;
+  if(d<3600) return Math.max(1,Math.round(d/60))+'m';
+  if(d<86400) return Math.round(d/3600)+'h';
+  return Math.round(d/86400)+'d';
 }
 function tScore(i){ var t=i.traction||{}; return (t.upvotes||0)+(t.comments||0); }
-function toast(msg){
-  var t=document.getElementById('toast'); t.textContent=msg; t.className='toast show';
-  setTimeout(function(){t.className='toast';},2200);
+function slug(i){ return i.sources?i.sources.slug:''; }
+function toast(msg,bad){
+  var t=document.getElementById('toast'); t.textContent=msg;
+  t.style.background=bad?'var(--negative)':'var(--positive)';
+  t.className='toast show'; setTimeout(function(){t.className='toast';},2400);
 }
-function go(v){ state.view=v; if(v!=='detail'&&v!=='analyze'){state.current=null;} render(); window.scrollTo(0,0); }
+function toggleTheme(){
+  var h=document.documentElement;
+  var next=h.getAttribute('data-theme')==='dark'?'light':'dark';
+  h.setAttribute('data-theme',next);
+  try{localStorage.setItem('ip-theme',next);}catch(e){}
+  var l=document.getElementById('theme-label'); if(l) l.textContent = next==='dark'?'Light mode':'Dark mode';
+}
+(function(){
+  var saved=null; try{saved=localStorage.getItem('ip-theme');}catch(e){}
+  if(saved){ document.documentElement.setAttribute('data-theme',saved); }
+  window.addEventListener('DOMContentLoaded',function(){
+    var l=document.getElementById('theme-label');
+    if(l) l.textContent = document.documentElement.getAttribute('data-theme')==='dark'?'Light mode':'Dark mode';
+  });
+})();
+function countUp(el, target){
+  var start=performance.now(), dur=900;
+  function tick(now){
+    var p=Math.min(1,(now-start)/dur); p=1-Math.pow(1-p,3);
+    el.textContent=Math.round(target*p);
+    if(p<1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+function go(v){
+  state.view=v;
+  if(v!=='detail'&&v!=='analyze'){ state.current=null; }
+  if(v==='feed'||v==='landscape'){ state.backTo=v; }
+  render(); window.scrollTo(0,0);
+}
+function openIdea(id){ state.current=state.ideas.find(function(i){return i.id===id;}); go('detail'); }
+function analysisFor(id){ return state.analyses.find(function(a){return a.idea_id===id;}); }
 
+/* ---------- data ---------- */
 function load(){
   Promise.all([
     api('/rest/v1/sources?select=id,slug,name&order=name'),
-    api('/rest/v1/ideas?select=*,sources(slug,name)&order=published_at.desc.nullslast&limit=400'),
-    api('/rest/v1/idea_analyses?select=idea_id,verdict,duration_seconds,created_at&order=created_at.desc&limit=500')
+    api('/rest/v1/ideas?select=*,sources(slug,name)&order=published_at.desc.nullslast&limit=500'),
+    api('/rest/v1/idea_analyses?select=idea_id,verdict,duration_seconds,created_at&order=created_at.desc&limit=1000')
   ]).then(function(res){
-    state.sources=res[0]; state.ideas=res[1]; state.analyses=res[2]; render();
+    state.sources=res[0]; state.ideas=res[1]; state.analyses=res[2]; state.loaded=true; render();
   }).catch(function(e){
-    document.getElementById('main').innerHTML='<div class="empty">Failed to load: '+esc(e.message)+'</div>';
+    document.getElementById('main').innerHTML='<div class="empty"><div class="t">Failed to load</div><div class="h">'+esc(e.message)+' - try reloading</div></div>';
   });
 }
-function analysisFor(id){ return state.analyses.find(function(a){return a.idea_id===id;}); }
 
+/* ---------- views ---------- */
 function render(){
-  document.getElementById('nav-feed').className = state.view==='feed'||state.view==='detail'||state.view==='analyze' ? 'on':'';
-  document.getElementById('nav-stats').className = state.view==='stats'?'on':'';
+  ['feed','landscape','stats'].forEach(function(v){
+    var active = state.view===v || (v===state.backTo && (state.view==='detail'||state.view==='analyze'));
+    var n=document.getElementById('nav-'+v); if(n) n.className='nav-item'+(active?' on':'');
+    var b=document.getElementById('bnav-'+v); if(b) b.className=(active?'on':'');
+  });
   var m=document.getElementById('main');
-  if(state.view==='feed') m.innerHTML=feedHtml();
+  if(!state.loaded){ m.innerHTML='<div class="spinner"></div>'; return; }
+  if(state.view==='feed') m.innerHTML=laneHtml('us');
+  else if(state.view==='landscape') m.innerHTML=laneHtml('de');
   else if(state.view==='detail') m.innerHTML=detailHtml();
   else if(state.view==='analyze') m.innerHTML=analyzeHtml();
   else if(state.view==='stats') m.innerHTML=statsHtml();
+  if(state.view==='feed') heroCount();
   if(state.view==='analyze') bindStep();
 }
 
-function feedHtml(){
-  var opts='<option value="all">All sources</option>';
-  state.sources.forEach(function(s){ opts+='<option value="'+s.slug+'"'+(state.src===s.slug?' selected':'')+'>'+esc(s.name)+'</option>'; });
-  var h='<div class="bar">'
-    +'<select onchange="state.src=this.value;render()">'+opts+'</select>'
-    +'<select onchange="state.sort=this.value;render()">'
-    +'<option value="new"'+(state.sort==='new'?' selected':'')+'>Newest</option>'
-    +'<option value="traction"'+(state.sort==='traction'?' selected':'')+'>Traction</option></select>'
-    +'<input placeholder="Search…" value="'+esc(state.q)+'" oninput="state.q=this.value;render()">'
-    +'</div>';
-  var list=state.ideas.filter(function(i){
-    if(state.src!=='all' && (!i.sources||i.sources.slug!==state.src)) return false;
-    if(state.q){ var q=state.q.toLowerCase(); if(!((i.title||'')+' '+(i.description||'')).toLowerCase().includes(q)) return false; }
+function laneIdeas(lane){
+  var slugs = lane==='us'?US_LANE:DE_LANE;
+  var srcFilter = lane==='us'?state.usSrc:state.deSrc;
+  var q = (lane==='us'?state.q:state.qDe).toLowerCase();
+  var list = state.ideas.filter(function(i){
+    if(slugs.indexOf(slug(i))<0) return false;
+    if(srcFilter!=='all' && slug(i)!==srcFilter) return false;
+    if(q && !((i.title||'')+' '+(i.description||'')).toLowerCase().includes(q)) return false;
     return true;
   });
   if(state.sort==='traction') list=list.slice().sort(function(a,b){return tScore(b)-tScore(a);});
-  if(!list.length) return h+'<div class="empty">No ideas match.</div>';
-  list.forEach(function(i){
-    var an=analysisFor(i.id);
-    h+='<div class="card" onclick="openIdea('+i.id+')"><h3>'+esc(i.title)+'</h3>'
-      +(i.description?'<p>'+esc(i.description)+'</p>':'')
-      +'<div class="meta"><span class="badge src">'+esc(i.sources?i.sources.name:'')+'</span>'
-      +(tScore(i)>0?'<span class="tr">▲ '+(i.traction.upvotes||0)+' · 💬 '+(i.traction.comments||0)+'</span>':'')
-      +(an?'<span class="badge done">analyzed · '+an.verdict+'</span>':'')
-      +'<span>'+timeAgo(i.published_at)+'</span></div></div>';
+  return list;
+}
+
+function rowHtml(i){
+  var s=slug(i), c=SRC_COLOR[s]||'#3b82f6', an=analysisFor(i.id);
+  var right = tScore(i)>0
+    ? '<div class="row-amt money">▲ '+(i.traction.upvotes||0)+(i.traction.comments?' · 💬 '+i.traction.comments:'')+'</div>'
+    : '<div class="row-amt money" style="color:var(--text-muted)">—</div>';
+  return '<div class="row" onclick="openIdea('+i.id+')">'
+    +'<div class="avatar" style="background:'+c+'22;color:'+c+'">'+(SRC_SHORT[s]||'?')+'</div>'
+    +'<div class="row-main"><div class="row-title">'+esc(i.title)+'</div>'
+    +'<div class="row-sub">'+esc(i.sources?i.sources.name:'')
+    +(an?' · <span style="color:'+(an.verdict==='build'?'var(--positive)':an.verdict==='watch'?'var(--amber)':'var(--negative)')+';font-weight:600">'+an.verdict+'</span>':'')
+    +(i.description?' · '+esc(i.description.slice(0,90)):'')+'</div></div>'
+    +'<div class="row-right">'+right+'<div class="row-when">'+timeAgo(i.published_at)+'</div></div>'
+    +'</div>';
+}
+
+function laneHtml(lane){
+  var isUs = lane==='us';
+  var slugs = isUs?US_LANE:DE_LANE;
+  var srcFilter = isUs?state.usSrc:state.deSrc;
+  var list = laneIdeas(lane);
+  var h='';
+
+  if(isUs){
+    var today = state.ideas.filter(function(i){
+      return US_LANE.indexOf(slug(i))>=0 && i.published_at && (Date.now()-new Date(i.published_at).getTime())<86400000;
+    }).length;
+    h+='<div class="hero"><div class="blob" style="width:220px;height:220px;top:-80px;right:-60px"></div>'
+      +'<div class="blob" style="width:160px;height:160px;bottom:-70px;left:-40px"></div>'
+      +'<div class="label">New US launches · last 24h</div>'
+      +'<div class="big money" id="hero-n" data-n="'+today+'">0</div>'
+      +'<div class="sub">The question for every single one: does this exist in Germany yet? · auto-refresh 07:00 & 19:00</div></div>';
+  } else {
+    h+='<div><h1 class="page-title">DE · EU Landscape</h1><div class="page-sub">Your reference layer - what already exists in the German and EU market. Use it to answer the Germany question.</div></div>';
+  }
+
+  var segs='<button class="'+(srcFilter==='all'?'on':'')+'" onclick="setSrc(\''+lane+'\',\'all\')">All</button>';
+  slugs.forEach(function(s){
+    var src=state.sources.find(function(x){return x.slug===s;});
+    if(src) segs+='<button class="'+(srcFilter===s?'on':'')+'" onclick="setSrc(\''+lane+'\',\''+s+'\')">'+esc(src.name)+'</button>';
   });
+  h+='<div class="bar"><div class="seg">'+segs+'</div>'
+    +'<div class="seg"><button class="'+(state.sort==='new'?'on':'')+'" onclick="state.sort=\'new\';render()">Newest</button>'
+    +'<button class="'+(state.sort==='traction'?'on':'')+'" onclick="state.sort=\'traction\';render()">Traction</button></div>'
+    +'<input class="search" placeholder="Search…" value="'+esc(isUs?state.q:state.qDe)+'" oninput="setQ(\''+lane+'\',this.value)"></div>';
+
+  if(!list.length){ h+='<div class="card"><div class="empty"><div class="t">No ideas match</div><div class="h">Try clearing filters - the scraper adds new ones twice a day</div></div></div>'; }
+  else { h+='<div class="card" style="padding:6px 10px"><div class="rows">'+list.map(rowHtml).join('')+'</div></div>'; }
   return h;
 }
-function openIdea(id){ state.current=state.ideas.find(function(i){return i.id===id;}); go('detail'); }
+function setSrc(lane,s){ if(lane==='us') state.usSrc=s; else state.deSrc=s; render(); }
+function setQ(lane,v){
+  if(lane==='us') state.q=v; else state.qDe=v;
+  clearTimeout(window.__qT); window.__qT=setTimeout(render,250);
+}
+function heroCount(){
+  var el=document.getElementById('hero-n');
+  if(el) countUp(el, parseInt(el.getAttribute('data-n'),10)||0);
+}
 
-function detailHtml(){
-  var i=state.current; if(!i) return feedHtml();
-  var an=analysisFor(i.id);
-  return '<span class="back" onclick="go(\'feed\')">← back to feed</span>'
-    +'<div class="detail"><h2>'+esc(i.title)+'</h2>'
-    +'<div class="meta"><span class="badge src">'+esc(i.sources?i.sources.name:'')+'</span>'
-    +(tScore(i)>0?'<span class="tr">▲ '+(i.traction.upvotes||0)+' · 💬 '+(i.traction.comments||0)+'</span>':'')
-    +'<span>'+timeAgo(i.published_at)+'</span>'
-    +(i.tags&&i.tags.length?i.tags.map(function(t){return '<span class="badge">'+esc(t)+'</span>';}).join(''):'')
-    +'</div>'
-    +(i.description?'<div class="desc">'+esc(i.description)+'</div>':'<div class="desc">(no description - open the link)</div>')
-    +'<div class="btnrow">'
-    +(i.url?'<a class="btn ghost" href="'+esc(i.url)+'" target="_blank" rel="noopener">Open link ↗</a>':'')
-    +(i.traction&&i.traction.hn_url?'<a class="btn ghost" href="'+esc(i.traction.hn_url)+'" target="_blank" rel="noopener">HN thread ↗</a>':'')
-    +(an?'<span class="badge done" style="align-self:center">already analyzed: '+an.verdict+'</span>':'')
-    +'<button class="btn" onclick="startRun()">'+(an?'Analyze again':'Analyze')+' ⏱</button>'
+function deLinks(i){
+  var t=encodeURIComponent(i.title||'');
+  return '<div class="card"><div class="section-label">🇩🇪 Does this exist in Germany?</div><div class="de-links">'
+    +'<a target="_blank" rel="noopener" href="https://www.google.de/search?q='+t+'+Deutschland">Google.de: title + Deutschland</a>'
+    +'<a target="_blank" rel="noopener" href="https://www.google.de/search?q='+t+'+deutsche+alternative">Google.de: deutsche Alternative</a>'
+    +'<a target="_blank" rel="noopener" href="https://www.deutsche-startups.de/?s='+t+'">deutsche-startups.de</a>'
+    +'<a target="_blank" rel="noopener" href="https://www.eu-startups.com/?s='+t+'">eu-startups.com</a>'
     +'</div></div>';
 }
 
+function detailHtml(){
+  var i=state.current; if(!i) return laneHtml('us');
+  var an=analysisFor(i.id), s=slug(i), c=SRC_COLOR[s]||'#3b82f6';
+  var isUs = US_LANE.indexOf(s)>=0;
+  return '<button class="back" onclick="go(state.backTo)">← back</button>'
+    +'<div class="card">'
+    +'<h2 class="detail-title">'+esc(i.title)+'</h2>'
+    +'<div class="meta"><span class="pill" style="background:'+c+'22;color:'+c+'">'+esc(i.sources?i.sources.name:'')+'</span>'
+    +(tScore(i)>0?'<span class="money">▲ '+(i.traction.upvotes||0)+' · 💬 '+(i.traction.comments||0)+'</span>':'')
+    +'<span>'+timeAgo(i.published_at)+' ago</span>'
+    +(an?'<span class="pill" style="background:var(--surface);color:'+(an.verdict==='build'?'var(--positive)':an.verdict==='watch'?'var(--amber)':'var(--negative)')+'">analyzed: '+an.verdict+'</span>':'')
+    +(i.tags&&i.tags.length?i.tags.slice(0,6).map(function(t){return '<span class="pill neutral">'+esc(t)+'</span>';}).join(''):'')
+    +'</div>'
+    +(i.description?'<p class="desc">'+esc(i.description)+'</p>':'<p class="desc">(no description - open the link)</p>')
+    +'<div class="btnrow" style="margin-top:18px">'
+    +(i.url?'<a class="btn outline" href="'+esc(i.url)+'" target="_blank" rel="noopener">Open link ↗</a>':'')
+    +(i.traction&&i.traction.hn_url?'<a class="btn outline" href="'+esc(i.traction.hn_url)+'" target="_blank" rel="noopener">HN thread ↗</a>':'')
+    +'<button class="btn primary" onclick="startRun()">'+(an?'Analyze again':'Analyze')+' ⏱</button>'
+    +'</div></div>'
+    +(isUs?deLinks(i):'');
+}
+
+/* ---------- analyze ---------- */
 function startRun(){
-  state.run={step:0, notes:{}, verdict:null, stepStart:Date.now(), runStart:Date.now(), perStep:{}, left:STEPS[0].sec, timerId:null};
+  state.run={step:0, notes:{}, verdict:null, stepStart:Date.now(), runStart:Date.now(), perStep:{}, timerId:null};
   go('analyze');
 }
 function analyzeHtml(){
   var r=state.run, s=STEPS[r.step], i=state.current;
   var pct=Math.round(r.step/STEPS.length*100);
-  var h='<span class="back" onclick="abortRun()">✕ abort analysis</span>'
+  var h='<button class="back" onclick="abortRun()">✕ abort analysis</button>'
     +'<div class="progress"><div style="width:'+pct+'%"></div></div>'
-    +'<div style="font-size:13px;color:var(--dim);margin-bottom:10px">'+esc(i.title)+'</div>'
-    +'<div class="an-step"><span class="timer" id="timer">'+r.left+'s</span>'
+    +'<div style="font-size:13px;color:var(--text-muted)">'+esc(i.title)+'</div>'
+    +'<div class="card"><span class="timer" id="timer">'+s.sec+'s</span>'
     +'<div class="qnum">Step '+(r.step+1)+' / '+STEPS.length+' · target '+s.sec+'s</div>'
-    +'<h3>'+s.title+'</h3><div class="hint">'+s.hint+'</div>';
+    +'<h3 class="q-title">'+s.title+'</h3><div class="q-hint">'+s.hint+'</div>';
   if(s.key==='verdict'){
     h+='<div class="vrow">'
-      +'<button class="btn green'+(r.verdict==='build'?' sel':'')+'" onclick="setV(\'build\')">BUILD</button>'
-      +'<button class="btn amber'+(r.verdict==='watch'?' sel':'')+'" onclick="setV(\'watch\')">WATCH</button>'
-      +'<button class="btn red'+(r.verdict==='skip'?' sel':'')+'" onclick="setV(\'skip\')">SKIP</button></div>'
+      +'<button class="btn good'+(r.verdict==='build'?' sel':'')+'" onclick="setV(\'build\')">BUILD</button>'
+      +'<button class="btn warn'+(r.verdict==='watch'?' sel':'')+'" onclick="setV(\'watch\')">WATCH</button>'
+      +'<button class="btn bad'+(r.verdict==='skip'?' sel':'')+'" onclick="setV(\'skip\')">SKIP</button></div>'
       +'<textarea id="note" placeholder="One-line reason…">'+esc(r.notes.verdict_reason||'')+'</textarea>'
-      +'<div class="btnrow"><button class="btn" onclick="nextStep()">Save analysis ✓</button></div>';
+      +'<div class="btnrow" style="margin-top:14px"><button class="btn primary" onclick="nextStep()">Save analysis ✓</button></div>';
   } else {
     h+='<textarea id="note" placeholder="Your quick take…">'+esc(r.notes[s.key]||'')+'</textarea>'
-      +'<div class="btnrow"><button class="btn" onclick="nextStep()">Next →</button></div>';
+      +'<div class="btnrow" style="margin-top:14px"><button class="btn primary" onclick="nextStep()">Next →</button></div>';
   }
-  return h+'</div>';
+  h+='</div>';
+  if(s.key==='dach_fit'){ h+=deLinks(i); }
+  return h;
 }
 function bindStep(){
   var r=state.run;
@@ -227,10 +447,10 @@ function nextStep(){
   saveNote();
   r.perStep[s.key]=Math.round((Date.now()-r.stepStart)/1000);
   if(s.key==='verdict'){
-    if(!r.verdict){ toast('Pick build / watch / skip'); return; }
+    if(!r.verdict){ toast('Pick build / watch / skip', true); return; }
     finishRun(); return;
   }
-  r.step++; r.stepStart=Date.now(); r.left=STEPS[r.step].sec; render();
+  r.step++; r.stepStart=Date.now(); render();
 }
 function abortRun(){
   if(state.run&&state.run.timerId) clearInterval(state.run.timerId);
@@ -247,28 +467,40 @@ function finishRun(){
       toast('Saved: '+r.verdict.toUpperCase()+' in '+payload.duration_seconds+'s');
       state.run=null; go('detail');
     })
-    .catch(function(e){ toast('Save failed: '+e.message); });
+    .catch(function(e){ toast('Save failed: '+e.message, true); });
 }
 
+/* ---------- stats ---------- */
 function statsHtml(){
   var a=state.analyses;
-  if(!a.length) return '<div class="empty">No analyses yet. Open an idea and hit Analyze.</div>';
+  var h='<div><h1 class="page-title">Training Stats</h1><div class="page-sub">Target: 4.5 min per idea. Faster with practice - that is the training.</div></div>';
+  if(!a.length) return h+'<div class="card"><div class="empty"><div class="t">No analyses yet</div><div class="h">Open an idea in the US Feed and hit Analyze</div></div></div>';
   var avg=Math.round(a.reduce(function(s,x){return s+(x.duration_seconds||0);},0)/a.length);
   var counts={build:0,watch:0,skip:0};
   a.forEach(function(x){ if(counts[x.verdict]!=null) counts[x.verdict]++; });
   var today=new Date().toDateString();
   var todayN=a.filter(function(x){return new Date(x.created_at).toDateString()===today;}).length;
-  return '<div class="stat-grid">'
-    +'<div class="stat"><div class="n">'+a.length+'</div><div class="l">total analyses</div></div>'
-    +'<div class="stat"><div class="n">'+todayN+'</div><div class="l">today</div></div>'
-    +'<div class="stat"><div class="n">'+Math.floor(avg/60)+':'+('0'+avg%60).slice(-2)+'</div><div class="l">avg time</div></div>'
-    +'<div class="stat"><div class="n" style="color:var(--green)">'+counts.build+'</div><div class="l">build</div></div>'
-    +'<div class="stat"><div class="n" style="color:var(--amber)">'+counts.watch+'</div><div class="l">watch</div></div>'
-    +'<div class="stat"><div class="n" style="color:var(--red)">'+counts.skip+'</div><div class="l">skip</div></div>'
+  var tot=counts.build+counts.watch+counts.skip||1;
+  h+='<div class="kpis">'
+    +'<div class="kpi"><div class="l">Total analyses</div><div class="v money">'+a.length+'</div></div>'
+    +'<div class="kpi"><div class="l">Today</div><div class="v money">'+todayN+'</div></div>'
+    +'<div class="kpi"><div class="l">Avg time</div><div class="v money">'+Math.floor(avg/60)+':'+('0'+avg%60).slice(-2)+'</div></div>'
+    +'<div class="kpi"><div class="l">Build rate</div><div class="v money" style="color:var(--positive)">'+Math.round(counts.build/tot*100)+'%</div></div>'
     +'</div>'
-    +'<div style="font-size:13px;color:var(--dim)">Target: 4.5 min per idea. Faster with practice - that is the training.</div>';
+    +'<div class="card"><div class="section-label">Verdicts</div>'
+    +'<div class="vbar">'
+    +'<div style="width:'+(counts.build/tot*100)+'%;background:var(--positive)"></div>'
+    +'<div style="width:'+(counts.watch/tot*100)+'%;background:var(--amber)"></div>'
+    +'<div style="width:'+(counts.skip/tot*100)+'%;background:var(--negative)"></div></div>'
+    +'<div class="legend">'
+    +'<span><span class="dot" style="background:var(--positive)"></span>build '+counts.build+'</span>'
+    +'<span><span class="dot" style="background:var(--amber)"></span>watch '+counts.watch+'</span>'
+    +'<span><span class="dot" style="background:var(--negative)"></span>skip '+counts.skip+'</span>'
+    +'</div></div>';
+  return h;
 }
-load();
+
+load(); render();
 </script>
 </body>
 </html>
