@@ -182,6 +182,9 @@ textarea:focus{border-color:var(--accent)}
     <button class="nav-item" id="nav-stats" onclick="go('stats')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
       Training Stats</button>
+    <button class="nav-item" id="nav-tv" onclick="go('tv')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="m17 2-5 5-5-5"/></svg>
+      TV Archive</button>
     <div class="nav-spacer"></div>
     <button class="theme-btn" onclick="toggleTheme()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
@@ -198,6 +201,9 @@ textarea:focus{border-color:var(--accent)}
   <button id="bnav-stats" onclick="go('stats')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
     Stats</button>
+  <button id="bnav-tv" onclick="go('tv')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="m17 2-5 5-5-5"/></svg>
+    TV</button>
 </nav>
 
 <div class="overlay" id="overlay" onclick="closeDrawer()"></div>
@@ -213,12 +219,14 @@ var US_LANE = ['hn-show','producthunt','techcrunch'];
 var DE_LANE = ['deutsche-startups','eu-startups'];
 var SRC_COLOR = {'hn-show':'#f97316','producthunt':'#ec4899','techcrunch':'#16a34a','deutsche-startups':'#a855f7','eu-startups':'#06b6d4'};
 var SRC_SHORT = {'hn-show':'HN','producthunt':'PH','techcrunch':'TC','deutsche-startups':'DS','eu-startups':'EU'};
+var TV_SHOWS = {shark_tank_us:{name:'Shark Tank',flag:'🇺🇸',short:'ST',color:'#2563eb'}, dragons_den_uk:{name:"Dragons' Den",flag:'🇬🇧',short:'DD',color:'#dc2626'}, dhdl_de:{name:'Höhle der Löwen',flag:'🇩🇪',short:'DHDL',color:'#16a34a'}};
 
 var COLS = '2.4fr .8fr .55fr 1fr .9fr';
 
 var state = {view:'screener', ideas:[], sources:[], analyses:[], loaded:false,
   lane:'us', src:'all', unanalyzed:false, q:'',
-  sortKey:'age', sortDir:'desc', current:null, run:null, deColSupported:true};
+  sortKey:'age', sortDir:'desc', current:null, run:null, deColSupported:true,
+  tv:[], tvLoaded:false, tvShow:'all', tvCat:'all', tvYear:'all', tvQ:'', tvSortKey:'air_date', tvSortDir:'desc', tvCurrent:null};
 
 var STEPS = [
   {key:'problem', title:'Problem', hint:'Who hurts, and how badly?', sec:30},
@@ -325,13 +333,14 @@ function setSort(k){
 
 /* ---------- render ---------- */
 function render(){
-  ['screener','stats'].forEach(function(v){
+  ['screener','stats','tv'].forEach(function(v){
     var n=document.getElementById('nav-'+v); if(n) n.className='nav-item'+(state.view===v?' on':'');
     var b=document.getElementById('bnav-'+v); if(b) b.className=(state.view===v?'on':'');
   });
   var m=document.getElementById('main');
   if(!state.loaded){ m.innerHTML='<div class="spinner"></div>'; return; }
   if(state.view==='stats') m.innerHTML=statsHtml();
+  else if(state.view==='tv'){ if(!state.tvLoaded){ m.innerHTML='<div class="spinner"></div>'; loadTv(); } else m.innerHTML=tvHtml(); }
   else m.innerHTML=screenerHtml();
 }
 
@@ -429,7 +438,7 @@ function openIdea(id){
 }
 function closeDrawer(){
   if(state.run&&state.run.timerId) clearInterval(state.run.timerId);
-  state.current=null; state.run=null;
+  state.current=null; state.run=null; state.tvCurrent=null;
   var o=document.getElementById('overlay'), d=document.getElementById('drawer');
   if(o) o.classList.remove('show'); if(d) d.classList.remove('show');
   if(state.loaded&&state.view!=='stats') render();
@@ -571,6 +580,143 @@ function finishRun(){
       state.run=null; renderDrawer(); render();
     })
     .catch(function(e){ toast('Save failed: '+e.message, true); });
+}
+
+/* ---------- TV archive ---------- */
+function loadTv(){
+  api('/rest/v1/tv_pitches?select=*&order=air_date.desc.nullslast&limit=3000')
+   .then(function(rows){ state.tv=rows; state.tvLoaded=true; if(state.view==='tv') render(); })
+   .catch(function(e){ var m=document.getElementById('main'); if(m) m.innerHTML='<div class="empty"><div class="t">Failed to load TV archive</div><div class="h">'+esc(e.message)+'</div></div>'; });
+}
+var TV_COLS='2.2fr 1.1fr .9fr .7fr .55fr .8fr';
+function tvYearOf(p){ return p.air_date?p.air_date.slice(0,4):''; }
+function tvList(){
+  var q=state.tvQ.toLowerCase();
+  var list=state.tv.filter(function(p){
+    if(state.tvShow!=='all'&&p.show!==state.tvShow) return false;
+    if(state.tvCat!=='all'&&(p.category||'')!==state.tvCat) return false;
+    if(state.tvYear!=='all'&&tvYearOf(p)!==state.tvYear) return false;
+    if(q && !((p.company||'')+' '+(p.description||'')+' '+(p.category||'')).toLowerCase().includes(q)) return false;
+    return true;
+  });
+  var k=state.tvSortKey, dir=state.tvSortDir==='asc'?1:-1;
+  list.sort(function(a,b){
+    var av,bv;
+    if(k==='air_date'){ av=a.air_date||''; bv=b.air_date||''; return av<bv?-1*dir:av>bv?1*dir:0; }
+    if(k==='company'){ av=(a.company||'').toLowerCase(); bv=(b.company||'').toLowerCase(); return av<bv?-1*dir:av>bv?1*dir:0; }
+    if(k==='category'){ av=(a.category||'').toLowerCase(); bv=(b.category||'').toLowerCase(); return av<bv?-1*dir:av>bv?1*dir:0; }
+    if(k==='show'){ av=(a.show||''); bv=(b.show||''); return av<bv?-1*dir:av>bv?1*dir:0; }
+    if(k==='season'){ av=(a.season||0)*100+(a.episode||0); bv=(b.season||0)*100+(b.episode||0); return (av-bv)*dir; }
+    if(k==='verdict'){ av=V_ORD[a.verdict]||0; bv=V_ORD[b.verdict]||0; return (av-bv)*dir; }
+    return 0;
+  });
+  return list;
+}
+function tvSetSort(k){ if(state.tvSortKey===k){ state.tvSortDir=state.tvSortDir==='asc'?'desc':'asc'; } else { state.tvSortKey=k; state.tvSortDir=(k==='company'||k==='category'||k==='show')?'asc':'desc'; } render(); }
+function tvVCell(p){ if(!p.verdict) return '<span class="st none">—</span>'; return '<span class="st '+p.verdict+'">'+p.verdict+'</span>'; }
+function tvRow(p){
+  var sh=TV_SHOWS[p.show]||{short:'?',color:'#3b82f6',flag:'',name:''};
+  var sel=state.tvCurrent&&state.tvCurrent.id===p.id?' sel':'';
+  var se=(p.season?'S'+p.season:'')+(p.episode?'E'+p.episode:'');
+  return '<div class="trow'+sel+'" onclick="openTv('+p.id+')">'
+    +'<div class="cell-idea"><div class="avatar" style="background:'+sh.color+'22;color:'+sh.color+'">'+sh.short+'</div>'
+    +'<div class="idea-main"><div class="idea-title">'+esc(p.company)+'</div>'
+    +'<div class="idea-sub">'+sh.flag+' '+esc(sh.name)+(p.description?' · '+esc(p.description.slice(0,60)):'')+'</div></div></div>'
+    +'<div class="cell-num mut" style="text-align:left;font-weight:500">'+esc(p.category||'—')+'</div>'
+    +'<div class="cell-num mut col-age" style="text-align:left;font-weight:500">'+esc(p.air_date||'—')+'</div>'
+    +'<div class="cell-num mut">'+(se||'—')+'</div>'
+    +'<div>'+sh.flag+'</div>'
+    +'<div>'+tvVCell(p)+'</div>'
+  +'</div>';
+}
+function tvTh(key,label,num){ var act=state.tvSortKey===key; var arr=state.tvSortDir==='asc'?'▲':'▼'; return '<div class="th'+(num?' num':'')+(act?' act':'')+'" onclick="tvSetSort(\''+key+'\')">'+label+' <span class="arr">'+arr+'</span></div>'; }
+function tvHtml(){
+  var list=tvList();
+  var cats=Array.from(new Set(state.tv.filter(function(p){return state.tvShow==='all'||p.show===state.tvShow;}).map(function(p){return p.category;}).filter(Boolean))).sort();
+  var years=Array.from(new Set(state.tv.map(tvYearOf).filter(Boolean))).sort().reverse();
+  var h='<div class="page-head"><div><h1 class="page-title">TV Archive</h1>'
+    +'<div class="page-sub">Every idea pitched on the investor shows, 2021→today. Same question as the Screener: does it already exist in Germany? Work them one by one.</div></div></div>';
+  h+='<div class="bar"><div class="seg">'
+    +'<button class="'+(state.tvShow==='all'?'on':'')+'" onclick="tvSetShow(\'all\')">All shows</button>'
+    +'<button class="'+(state.tvShow==='shark_tank_us'?'on':'')+'" onclick="tvSetShow(\'shark_tank_us\')">\U0001F1FA\U0001F1F8 Shark Tank</button>'
+    +'<button class="'+(state.tvShow==='dragons_den_uk'?'on':'')+'" onclick="tvSetShow(\'dragons_den_uk\')">\U0001F1EC\U0001F1E7 Dragons\' Den</button>'
+    +'<button class="'+(state.tvShow==='dhdl_de'?'on':'')+'" onclick="tvSetShow(\'dhdl_de\')">\U0001F1E9\U0001F1EA DHDL</button>'
+    +'</div>';
+  var ysel='<select class="search" style="flex:none;max-width:120px" onchange="state.tvYear=this.value;render()"><option value="all"'+(state.tvYear==='all'?' selected':'')+'>All years</option>';
+  years.forEach(function(y){ ysel+='<option value="'+y+'"'+(state.tvYear===y?' selected':'')+'>'+y+'</option>'; });
+  ysel+='</select>';
+  var csel='<select class="search" style="flex:none;max-width:190px" onchange="state.tvCat=this.value;render()"><option value="all"'+(state.tvCat==='all'?' selected':'')+'>All categories</option>';
+  cats.forEach(function(c){ csel+='<option value="'+esc(c)+'"'+(state.tvCat===c?' selected':'')+'>'+esc(c)+'</option>'; });
+  csel+='</select>';
+  h+=ysel+csel
+    +'<input class="search" placeholder="Search pitches…" value="'+esc(state.tvQ)+'" oninput="tvSetQ(this.value)">'
+    +'<span class="count-chip">'+list.length+' pitch'+(list.length===1?'':'es')+'</span></div>';
+  if(!list.length){ h+='<div class="tbl"><div class="empty"><div class="t">No pitches match</div><div class="h">Clear the filters</div></div></div>'; return h; }
+  h+='<div class="tbl" style="--cols:'+TV_COLS+'">'
+    +'<div class="trow thead">'
+    +tvTh('company','Company')
+    +tvTh('category','Category')
+    +'<div class="th'+(state.tvSortKey==='air_date'?' act':'')+' col-age" onclick="tvSetSort(\'air_date\')">Air date <span class="arr">'+(state.tvSortDir==='asc'?'▲':'▼')+'</span></div>'
+    +tvTh('season','S/E',true)
+    +tvTh('show','Show')
+    +tvTh('verdict','Verdict')
+    +'</div><div class="tbody">'+list.map(tvRow).join('')+'</div></div>';
+  return h;
+}
+function tvSetShow(sh){ state.tvShow=sh; state.tvCat='all'; render(); }
+function tvSetQ(v){ state.tvQ=v; clearTimeout(window.__tvqT); window.__tvqT=setTimeout(render,220); }
+function openTv(id){
+  state.tvCurrent=state.tv.find(function(p){return p.id===id;});
+  renderTvDrawer();
+  document.getElementById('overlay').classList.add('show');
+  document.getElementById('drawer').classList.add('show');
+  render();
+}
+function tvDeLinks(p){
+  var t=encodeURIComponent(p.company||'');
+  return '<div class="section-label">\U0001F1E9\U0001F1EA Does this exist in Germany?</div><div class="de-links">'
+    +'<a target="_blank" rel="noopener" href="https://www.google.de/search?q='+t+'+Deutschland">Google.de: name + Deutschland</a>'
+    +'<a target="_blank" rel="noopener" href="https://www.google.de/search?q='+t+'+deutsche+alternative">Google.de: deutsche Alternative</a>'
+    +'<a target="_blank" rel="noopener" href="https://www.deutsche-startups.de/?s='+t+'">deutsche-startups.de</a>'
+    +'<a target="_blank" rel="noopener" href="https://www.eu-startups.com/?s='+t+'">eu-startups.com</a>'
+    +'</div>';
+}
+function renderTvDrawer(){
+  var p=state.tvCurrent; if(!p) return;
+  var sh=TV_SHOWS[p.show]||{name:'',flag:'',color:'#3b82f6'};
+  var se=(p.season?'Season '+p.season:'')+(p.episode?' · Ep '+p.episode:'');
+  var v=p.verdict;
+  var h='<div class="drawer-head"><span class="dtag">'+sh.flag+' '+esc(sh.name)+(se?' · '+esc(se):'')+'</span>'
+    +'<button class="iconbtn" onclick="closeDrawer()">✕</button></div>'
+    +'<div class="drawer-body">'
+    +'<h2 class="detail-title">'+esc(p.company)+'</h2>'
+    +'<div class="meta">'
+    +(p.category?'<span class="pill neutral">'+esc(p.category)+'</span>':'')
+    +(p.air_date?'<span>'+esc(p.air_date)+'</span>':'')
+    +(p.status_today?'<span class="pill neutral">'+esc(p.status_today)+'</span>':'')
+    +'</div>'
+    +(p.description?'<p class="desc">'+esc(p.description)+'</p>':'')
+    +'<div class="btnrow">'
+    +(p.source_url?'<a class="btn outline" href="'+esc(p.source_url)+'" target="_blank" rel="noopener">Source ↗</a>':'')
+    +(p.website?'<a class="btn outline" href="'+esc(p.website)+'" target="_blank" rel="noopener">Website ↗</a>':'')
+    +'</div>'
+    +'<div class="section-label">Your verdict</div>'
+    +'<div class="setter">'
+    +'<button class="gap'+(v==='build'?' sel':'')+'" onclick="tvSetV(\'build\')">● Build</button>'
+    +'<button class="unknown'+(v==='watch'?' sel':'')+'" onclick="tvSetV(\'watch\')">● Watch</button>'
+    +'<button class="exists'+(v==='skip'?' sel':'')+'" onclick="tvSetV(\'skip\')">● Skip</button>'
+    +'</div>'
+    +tvDeLinks(p)
+    +'</div>';
+  document.getElementById('drawer-inner').innerHTML=h;
+}
+function tvSetV(v){
+  var p=state.tvCurrent; if(!p) return;
+  var prev=p.verdict; p.verdict=(p.verdict===v?null:v);
+  renderTvDrawer(); render();
+  api('/rest/v1/tv_pitches?id=eq.'+p.id,{method:'PATCH',body:JSON.stringify({verdict:p.verdict})})
+    .then(function(){ toast('Verdict: '+(p.verdict||'cleared')); })
+    .catch(function(e){ p.verdict=prev; renderTvDrawer(); render(); toast('Save failed: '+e.message,true); });
 }
 
 /* ---------- stats ---------- */
