@@ -638,9 +638,9 @@ function tvHtml(){
     +'<div class="page-sub">Every idea pitched on the investor shows, 2021→today. Same question as the Screener: does it already exist in Germany? Work them one by one.</div></div></div>';
   h+='<div class="bar"><div class="seg">'
     +'<button class="'+(state.tvShow==='all'?'on':'')+'" onclick="tvSetShow(\'all\')">All shows</button>'
-    +'<button class="'+(state.tvShow==='shark_tank_us'?'on':'')+'" onclick="tvSetShow(\'shark_tank_us\')">\U0001F1FA\U0001F1F8 Shark Tank</button>'
-    +'<button class="'+(state.tvShow==='dragons_den_uk'?'on':'')+'" onclick="tvSetShow(\'dragons_den_uk\')">\U0001F1EC\U0001F1E7 Dragons\' Den</button>'
-    +'<button class="'+(state.tvShow==='dhdl_de'?'on':'')+'" onclick="tvSetShow(\'dhdl_de\')">\U0001F1E9\U0001F1EA DHDL</button>'
+    +'<button class="'+(state.tvShow==='shark_tank_us'?'on':'')+'" onclick="tvSetShow(\'shark_tank_us\')">🇺🇸 Shark Tank</button>'
+    +'<button class="'+(state.tvShow==='dragons_den_uk'?'on':'')+'" onclick="tvSetShow(\'dragons_den_uk\')">🇬🇧 Dragons\' Den</button>'
+    +'<button class="'+(state.tvShow==='dhdl_de'?'on':'')+'" onclick="tvSetShow(\'dhdl_de\')">🇩🇪 DHDL</button>'
     +'</div>';
   var ysel='<select class="search" style="flex:none;max-width:120px" onchange="state.tvYear=this.value;render()"><option value="all"'+(state.tvYear==='all'?' selected':'')+'>All years</option>';
   years.forEach(function(y){ ysel+='<option value="'+y+'"'+(state.tvYear===y?' selected':'')+'>'+y+'</option>'; });
@@ -674,7 +674,7 @@ function openTv(id){
 }
 function tvDeLinks(p){
   var t=encodeURIComponent(p.company||'');
-  return '<div class="section-label">\U0001F1E9\U0001F1EA Does this exist in Germany?</div><div class="de-links">'
+  return '<div class="section-label">🇩🇪 Does this exist in Germany?</div><div class="de-links">'
     +'<a target="_blank" rel="noopener" href="https://www.google.de/search?q='+t+'+Deutschland">Google.de: name + Deutschland</a>'
     +'<a target="_blank" rel="noopener" href="https://www.google.de/search?q='+t+'+deutsche+alternative">Google.de: deutsche Alternative</a>'
     +'<a target="_blank" rel="noopener" href="https://www.deutsche-startups.de/?s='+t+'">deutsche-startups.de</a>'
