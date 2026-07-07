@@ -166,6 +166,28 @@ textarea:focus{border-color:var(--accent)}
 .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--positive);color:#fff;padding:10px 20px;border-radius:var(--radius);font-size:14px;font-weight:600;opacity:0;transition:opacity .3s;pointer-events:none;z-index:60;box-shadow:var(--shadow)}
 .toast.show{opacity:1}
 
+/* feed */
+.feed-wrap{max-width:860px}
+.feed{display:flex;flex-direction:column;gap:12px}
+.fcard{border-radius:var(--radius);background:var(--card);border:1px solid var(--border);box-shadow:var(--shadow);padding:16px 18px;transition:border-color .12s ease}
+.fcard:hover{border-color:color-mix(in srgb, var(--accent) 40%, var(--border))}
+.fhead{display:flex;align-items:flex-start;gap:12px}
+.ftitle{font-size:16px;font-weight:700;letter-spacing:-.01em;line-height:1.3}
+.fmeta{font-size:12px;color:var(--text-muted);display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:4px}
+.fsum{font-size:14px;color:var(--text);line-height:1.55;margin:11px 0 0}
+.fangle{font-size:13px;color:var(--text-muted);margin-top:9px;border-left:2px solid color-mix(in srgb, var(--positive) 50%, var(--border));padding-left:10px;line-height:1.5}
+.factions{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:13px}
+.fbtn{border-radius:var(--radius-pill);border:1px solid var(--border);background:var(--surface);color:var(--text-muted);padding:6px 12px;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:all .12s ease}
+.fbtn:hover{color:var(--text)}
+.fbtn.sel.gap{background:#16a34a18;color:var(--positive);border-color:transparent}
+.fbtn.sel.exists{background:#ef444418;color:var(--negative);border-color:transparent}
+.fbtn.sel.unknown{background:var(--card);color:var(--text);border-color:var(--border)}
+.daygroup{font-size:11px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--text-muted);margin:20px 2px 2px}
+.seenline{display:flex;align-items:center;gap:12px;color:var(--accent);font-size:11px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;margin:16px 0 6px}
+.seenline::before,.seenline::after{content:"";height:1px;background:var(--accent);opacity:.35;flex:1}
+.loadmore{margin:22px auto 8px;display:block;border-radius:var(--radius);border:1px solid var(--border);background:var(--card);color:var(--text);padding:11px 22px;font-size:14px;font-weight:600;font-family:inherit;cursor:pointer}
+.loadmore:hover{background:var(--surface)}
+
 /* hide columns on narrow */
 @media (max-width:640px){
   .col-age{display:none}
@@ -176,6 +198,9 @@ textarea:focus{border-color:var(--accent)}
 <div class="shell">
   <aside class="sidebar">
     <div class="brand">idea<span>·</span>platform</div>
+    <button class="nav-item" id="nav-feed" onclick="go('feed')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+      Radar</button>
     <button class="nav-item" id="nav-screener" onclick="go('screener')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
       Screener</button>
@@ -195,6 +220,9 @@ textarea:focus{border-color:var(--accent)}
 </div>
 
 <nav class="bottombar">
+  <button id="bnav-feed" onclick="go('feed')">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+    Radar</button>
   <button id="bnav-screener" onclick="go('screener')">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18"/></svg>
     Screener</button>
@@ -223,10 +251,10 @@ var TV_SHOWS = {shark_tank_us:{name:'Shark Tank',flag:'🇺🇸',short:'ST',colo
 
 var COLS = '2.4fr .8fr .55fr 1fr .9fr';
 
-var state = {view:'screener', ideas:[], sources:[], analyses:[], loaded:false,
-  lane:'us', src:'all', unanalyzed:false, q:'',
+var state = {view:'feed', ideas:[], sources:[], analyses:[], loaded:false,
+  lane:'all', src:'all', unanalyzed:false, q:'',
   sortKey:'age', sortDir:'desc', current:null, run:null, deColSupported:true,
-  tv:[], tvLoaded:false, tvShow:'all', tvCat:'all', tvYear:'all', tvQ:'', tvSortKey:'air_date', tvSortDir:'desc', tvCurrent:null};
+  tv:[], tvLoaded:false, tvShow:'all', tvCat:'all', tvYear:'all', tvQ:'', tvSortKey:'air_date', tvSortDir:'desc', tvCurrent:null, feedLimit:40, feedSince:undefined};
 
 var STEPS = [
   {key:'problem', title:'Problem', hint:'Who hurts, and how badly?', sec:30},
@@ -287,7 +315,7 @@ function analysisFor(id){ return state.analyses.find(function(a){return a.idea_i
 function load(){
   Promise.all([
     api('/rest/v1/sources?select=id,slug,name&order=name'),
-    api('/rest/v1/ideas?select=*,sources(slug,name)&order=published_at.desc.nullslast&limit=500'),
+    api('/rest/v1/ideas?select=*,sources(slug,name)&order=published_at.desc.nullslast&limit=2000'),
     api('/rest/v1/idea_analyses?select=idea_id,verdict,duration_seconds,created_at&order=created_at.desc&limit=1000')
   ]).then(function(res){
     state.sources=res[0]; state.ideas=res[1]; state.analyses=res[2];
@@ -331,15 +359,100 @@ function setSort(k){
   render();
 }
 
+/* ---------- feed (Launch Radar) ---------- */
+function feedList(){
+  var list=screenIdeas();
+  return list.slice().sort(function(a,b){
+    return (b.published_at?new Date(b.published_at).getTime():0)-(a.published_at?new Date(a.published_at).getTime():0);
+  });
+}
+function feedDayLabel(iso){
+  if(!iso) return 'Undated';
+  var d=new Date(iso), now=new Date();
+  var today=now.toDateString();
+  var yest=new Date(now.getTime()-86400000).toDateString();
+  if(d.toDateString()===today) return 'Today';
+  if(d.toDateString()===yest) return 'Yesterday';
+  return d.toLocaleDateString(undefined,{weekday:'short', month:'short', day:'numeric'});
+}
+function setDeCard(id,v){
+  var i=state.ideas.find(function(x){return x.id===id;}); if(!i) return;
+  var prev=i.de_status; i.de_status=(i.de_status===v?null:v); render();
+  if(!state.deColSupported){ toast('DE-status saved locally',true); return; }
+  api('/rest/v1/ideas?id=eq.'+id,{method:'PATCH',body:JSON.stringify({de_status:i.de_status})})
+    .then(function(){ toast('DE-status: '+(i.de_status||'cleared')); })
+    .catch(function(e){ i.de_status=prev; render(); toast('Save failed: '+e.message,true); });
+}
+function feedCard(i){
+  var sg=slug(i), c=SRC_COLOR[sg]||'#3b82f6', ln=laneOf(i);
+  var flag=ln==='us'?'🇺🇸':(ln==='de'?'🇩🇪':'');
+  var ds=deStatus(i), an=analysisFor(i.id);
+  var sum=i.summary||(i.description?i.description.slice(0,240):'');
+  var trunc=!i.summary&&i.description&&i.description.length>240?'…':'';
+  return '<div class="fcard">'
+    +'<div class="fhead"><div class="avatar" style="background:'+c+'22;color:'+c+'">'+(SRC_SHORT[sg]||'?')+'</div>'
+    +'<div style="min-width:0;flex:1"><div class="ftitle">'+esc(i.title)+'</div>'
+    +'<div class="fmeta">'+(flag?flag+' ':'')+'<span>'+esc(i.sources?i.sources.name:'')+'</span>'
+      +(tScore(i)>0?'<span class="money">▲ '+(i.traction.upvotes||0)+(i.traction.comments?' · '+i.traction.comments+'c':'')+'</span>':'')
+      +'<span>'+(timeAgo(i.published_at)||'')+(timeAgo(i.published_at)?' ago':'')+'</span>'
+      +(i.category?'<span class="pill neutral">'+esc(i.category)+'</span>':'')
+      +(an?'<span class="st '+an.verdict+'">'+an.verdict+'</span>':'')
+    +'</div></div></div>'
+    +(sum?'<p class="fsum">'+esc(sum)+trunc+'</p>':'')
+    +(i.germany_angle?'<div class="fangle">🇩🇪 '+esc(i.germany_angle)+'</div>':'')
+    +'<div class="factions">'
+      +'<button class="fbtn exists'+(ds==='exists'?' sel':'')+'" onclick="setDeCard('+i.id+',\'exists\')">Exists in DE</button>'
+      +'<button class="fbtn gap'+(ds==='gap'?' sel':'')+'" onclick="setDeCard('+i.id+',\'gap\')">Gap 🇩🇪</button>'
+      +'<button class="fbtn unknown'+(!i.de_status?' sel':'')+'" onclick="setDeCard('+i.id+',\'unknown\')">Unknown</button>'
+      +'<span style="flex:1"></span>'
+      +'<button class="fbtn" onclick="openIdea('+i.id+')">Analyze ⏱</button>'
+      +(i.url?'<a class="fbtn" href="'+esc(i.url)+'" target="_blank" rel="noopener">Open ↗</a>':'')
+    +'</div>'
+  +'</div>';
+}
+function feedHtml(){
+  if(state.feedSince===undefined){ try{state.feedSince=Number(localStorage.getItem('ip-feed-seen'))||0;}catch(e){state.feedSince=0;} try{localStorage.setItem('ip-feed-seen',String(Date.now()));}catch(e){} }
+  if(!state.feedLimit) state.feedLimit=40;
+  var list=feedList();
+  var shown=list.slice(0,state.feedLimit);
+  var h='<div class="page-head"><div><h1 class="page-title">Launch Radar</h1>'
+    +'<div class="page-sub">Every new launch in one scroll — read without clicking. Does each already exist in Germany? Set it inline. Newest first, auto-refreshes 07:00 &amp; 19:00.</div></div></div>';
+  // filter bar
+  h+='<div class="bar"><div class="seg">'
+    +'<button class="'+(state.lane==='all'?'on':'')+'" onclick="setLane(\'all\')">All</button>'
+    +'<button class="'+(state.lane==='us'?'on':'')+'" onclick="setLane(\'us\')">🇺🇸 US</button>'
+    +'<button class="'+(state.lane==='de'?'on':'')+'" onclick="setLane(\'de\')">🇩🇪 DE·EU</button>'
+    +'</div>'
+    +'<div class="seg"><button class="'+(state.unanalyzed?'on':'')+'" onclick="state.unanalyzed=!state.unanalyzed;render()">Unanalyzed only</button></div>'
+    +'<input class="search" placeholder="Search launches…" value="'+esc(state.q)+'" oninput="setQ(this.value)">'
+    +'<span class="count-chip">'+list.length+' launch'+(list.length===1?'':'es')+'</span></div>';
+  if(!list.length){ return h+'<div class="tbl"><div class="empty"><div class="t">No launches match</div><div class="h">Clear the filters</div></div></div>'; }
+  h+='<div class="feed-wrap"><div class="feed">';
+  var lastDay='', seenDrawn=false;
+  for(var j=0;j<shown.length;j++){
+    var i=shown[j];
+    var t=i.published_at?new Date(i.published_at).getTime():0;
+    if(!seenDrawn && state.feedSince>0 && t<=state.feedSince){ h+='<div class="seenline">seen up to here last visit</div>'; seenDrawn=true; }
+    var dl=feedDayLabel(i.published_at);
+    if(dl!==lastDay){ h+='<div class="daygroup">'+dl+'</div>'; lastDay=dl; }
+    h+=feedCard(i);
+  }
+  h+='</div>';
+  if(list.length>state.feedLimit){ h+='<button class="loadmore" onclick="state.feedLimit+=40;render()">Load '+Math.min(40,list.length-state.feedLimit)+' more · '+(list.length-state.feedLimit)+' left</button>'; }
+  h+='</div>';
+  return h;
+}
+
 /* ---------- render ---------- */
 function render(){
-  ['screener','stats','tv'].forEach(function(v){
+  ['feed','screener','stats','tv'].forEach(function(v){
     var n=document.getElementById('nav-'+v); if(n) n.className='nav-item'+(state.view===v?' on':'');
     var b=document.getElementById('bnav-'+v); if(b) b.className=(state.view===v?'on':'');
   });
   var m=document.getElementById('main');
   if(!state.loaded){ m.innerHTML='<div class="spinner"></div>'; return; }
-  if(state.view==='stats') m.innerHTML=statsHtml();
+  if(state.view==='feed') m.innerHTML=feedHtml();
+  else if(state.view==='stats') m.innerHTML=statsHtml();
   else if(state.view==='tv'){ if(!state.tvLoaded){ m.innerHTML='<div class="spinner"></div>'; loadTv(); } else m.innerHTML=tvHtml(); }
   else m.innerHTML=screenerHtml();
 }
